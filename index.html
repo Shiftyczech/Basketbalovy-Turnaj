@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketbalový Turnaj VOŠKH | Kutná Hora</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="overlay">
+            <nav>
+                <div class="logo">VOŠKH<span>CUP</span></div>
+            </nav>
+            <div class="hero-content">
+                <h1>Basketbalový Turnaj</h1>
+                <p>Exkluzivně pro žáky VOŠKH Kutná Hora</p>
+                <a href="#registrace" class="btn">Chci se registrovat</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="info" class="section">
+        <div class="container">
+            <h2>O turnaji</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Kde?</h3>
+                    <p>Sportovní hala <strong>Klimeška</strong>, Kutná Hora.</p>
+                </div>
+                <div class="info-card">
+                    <h3>Kdo?</h3>
+                    <p>Pouze pro registrované studenty <strong>VOŠKH</strong>.</p>
+                </div>
+                <div class="info-card">
+                    <h3>O co se hraje?</h3>
+                    <p>Vítězný tým získá prestižní pohár a věcné balíčky od partnerů.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  
+            <form id="teamForm" class="reg-form">
+    <label for="name">Jméno kapitána:</label>
+    <input type="text" name="Kapitan" id="name" placeholder="Jan Novák" required>
+    
+    <label for="email">Tvůj školní Email:</label>
+    <input type="email" name="Email" id="email" placeholder="student@voskh.cz" required>
+    
+    <label for="team">Název týmu:</label>
+    <input type="text" name="Tym" id="team" placeholder="Drim Tým 4.A" required>
+
+    <label for="message">Poznámka (volitelné):</label>
+    <textarea name="Zprava" id="message" placeholder="Např. soupiska hráčů..."></textarea>
+    
+    <button type="submit" class="btn">Odeslat přihlášku</button>
+    
+    <p id="form-status" style="margin-top: 15px; font-weight: bold;"></p>
+</form>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Basketbal VOŠKH - Hala Klimeška Kutná Hora</p>
+    </footer>
+
+</body>
+<script src="script.js"></script>
+</body>
+
+</html>
