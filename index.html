@@ -114,6 +114,92 @@
         .reg-form input:focus { border-color: var(--orange); box-shadow: 0 0 10px rgba(255,87,34,0.2); }
 
         footer { padding: 50px; color: #444; }
+
+        /* --- TABULKA TÝMŮ --- */
+        .teams-section { padding: 100px 0; background: #000; }
+        .teams-section h2 { font-family: 'Bebas Neue'; font-size: 3.5rem; margin-bottom: 40px; }
+
+        .teams-table-wrapper {
+            overflow-x: auto;
+            border-radius: 15px;
+            background: var(--card-bg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        .teams-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .teams-table thead {
+            background: var(--orange);
+        }
+
+        .teams-table th {
+            padding: 18px 24px;
+            text-align: left;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .teams-table td {
+            padding: 16px 24px;
+            border-bottom: 1px solid #2a2a2a;
+            color: #ccc;
+            vertical-align: top;
+        }
+
+        .teams-table tbody tr {
+            transition: background 0.3s ease;
+        }
+
+        .teams-table tbody tr:hover {
+            background: #252525;
+        }
+
+        .teams-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .team-name {
+            font-weight: 700;
+            color: var(--orange);
+            font-size: 1.05rem;
+        }
+
+        .team-number {
+            color: #555;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+
+        .players-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .players-list li {
+            background: #0d0d0d;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #333;
+        }
+
+        .no-teams-msg {
+            padding: 60px 24px;
+            color: #555;
+            font-size: 1.1rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -125,6 +211,7 @@
                 <h1>Hala Klimeška<br>Kutná Hora</h1>
                 <p style="font-size: 1.2rem; letter-spacing: 2px;">BASKETBALOVÝ TURNAJ PRO ŽÁKY VOŠKH</p>
                 <a href="#registrace" class="btn">ZAREGISTROVAT TÝM</a>
+                <a href="#tymy" class="btn" style="background: transparent; border: 2px solid var(--orange); margin-left: 10px;">ZOBRAZIT TÝMY</a>
             </div>
         </div>
     </header>
@@ -155,6 +242,82 @@
             <div class="info-card">
                 <h3>Odměny</h3>
                 <p>Vítězný tým získá putovní pohár a hodnotné balíčky. Poražení však nemusí smutnit, atmosféra bude stát za to!</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="tymy" class="teams-section">
+        <div class="container">
+            <h2>Registrované týmy</h2>
+            <div class="teams-table-wrapper">
+                <table class="teams-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Název týmu</th>
+                            <th>Kapitán</th>
+                            <th>Hráči</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="team-number">1</td>
+                            <td class="team-name">Klimeška Wolves</td>
+                            <td>Jan Novák</td>
+                            <td>
+                                <ul class="players-list">
+                                    <li>Jan Novák</li>
+                                    <li>Petr Dvořák</li>
+                                    <li>Martin Svoboda</li>
+                                    <li>Tomáš Černý</li>
+                                    <li>Lukáš Procházka</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="team-number">2</td>
+                            <td class="team-name">VOŠKH Dragons</td>
+                            <td>Filip Veselý</td>
+                            <td>
+                                <ul class="players-list">
+                                    <li>Filip Veselý</li>
+                                    <li>Jakub Kučera</li>
+                                    <li>David Horák</li>
+                                    <li>Adam Němec</li>
+                                    <li>Ondřej Marek</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="team-number">3</td>
+                            <td class="team-name">Kutná Hora Ballers</td>
+                            <td>Matěj Pokorný</td>
+                            <td>
+                                <ul class="players-list">
+                                    <li>Matěj Pokorný</li>
+                                    <li>Vojtěch Král</li>
+                                    <li>Daniel Jelínek</li>
+                                    <li>Šimon Růžička</li>
+                                    <li>Marek Fiala</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="team-number">4</td>
+                            <td class="team-name">Court Kings</td>
+                            <td>Štěpán Bartoš</td>
+                            <td>
+                                <ul class="players-list">
+                                    <li>Štěpán Bartoš</li>
+                                    <li>Dominik Šťastný</li>
+                                    <li>Michal Kolář</li>
+                                    <li>Pavel Urban</li>
+                                    <li>Richard Blažek</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
