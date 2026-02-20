@@ -4,69 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Basketbalový Turnaj VOŠKH | Kutná Hora</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --orange: #FF5722;
+            --orange-hover: #e64a19;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #fff; background-color: var(--dark-bg); }
+        .container { width: 90%; max-width: 1100px; margin: auto; text-align: center; }
+        
+        /* --- OPRAVA HEADERU (Obrázek už nebude uřízlý) --- */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
+                        url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 80vh; /* Zvětšeno, aby obrázek vynikl */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .logo { position: absolute; top: 30px; font-weight: 900; font-size: 1.8rem; letter-spacing: 2px; font-family: 'Bebas Neue'; }
+        .logo span { color: var(--orange); }
+
+        .hero-content h1 { 
+            font-size: clamp(3rem, 8vw, 5rem); 
+            text-transform: uppercase; 
+            font-family: 'Bebas Neue', sans-serif;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* --- ANIMACE PRO TLAČÍTKO --- */
+        .btn { 
+            display: inline-block; 
+            background: var(--orange); 
+            color: white; 
+            padding: 18px 40px; 
+            text-decoration: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            margin-top: 30px; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 15px rgba(255,87,34,0.3);
+        }
+        .btn:hover { 
+            background: var(--orange-hover); 
+            transform: translateY(-5px) scale(1.05); 
+            box-shadow: 0 8px 25px rgba(255,87,34,0.5);
+        }
+
+        /* --- ODPOČET --- */
+        #countdown-section { 
+            background: #000; 
+            padding: 60px 0; 
+            border-top: 4px solid var(--orange); 
+        }
+
+        .countdown { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0; }
+        
+        /* ANIMACE PRO ČÍSLA ODPOČTU */
+        .digit-box { 
+            background: var(--card-bg); 
+            border: 2px solid rgba(255,87,34,0.3); 
+            border-radius: 12px; 
+            padding: 1.5rem; 
+            min-width: 110px;
+            transition: border-color 0.3s ease;
+        }
+        .digit-box:hover { border-color: var(--orange); }
+
+        .digit { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #fff; line-height: 1; }
+        .unit-label { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: #888; }
+
+        /* --- INFO KARTY S ANIMACÍ --- */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
+        
+        .info-card { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 15px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border-bottom: 4px solid transparent;
+        }
+        .info-card:hover { 
+            transform: translateY(-15px); 
+            background: #252525;
+            border-bottom: 4px solid var(--orange);
+        }
+        .info-card h3 { color: var(--orange); margin-bottom: 15px; font-family: 'Bebas Neue'; font-size: 1.8rem; }
+
+        /* --- REGISTRACE --- */
+        .reg-section { padding: 100px 0; background: #080808; }
+        .reg-form { 
+            max-width: 600px; margin: auto; background: var(--card-bg); padding: 40px; border-radius: 20px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .reg-form input, .reg-form textarea { 
+            width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #333; 
+            background: #0d0d0d; color: white; border-radius: 8px; outline: none; transition: 0.3s;
+        }
+        .reg-form input:focus { border-color: var(--orange); box-shadow: 0 0 10px rgba(255,87,34,0.2); }
+
+        footer { padding: 50px; color: #444; }
+    </style>
 </head>
 <body>
 
     <header>
-        <div class="overlay">
-            <nav>
-                <div class="logo">VOŠKH<span>CUP</span></div>
-            </nav>
+        <div class="logo">VOŠKH<span>CUP</span></div>
+        <div class="container">
             <div class="hero-content">
-                <h1>Basketbalový Turnaj</h1>
-                <p>Exkluzivně pro žáky VOŠKH Kutná Hora</p>
-                <a href="#registrace" class="btn">Chci se registrovat</a>
+                <h1>Hala Klimeška<br>Kutná Hora</h1>
+                <p style="font-size: 1.2rem; letter-spacing: 2px;">BASKETBALOVÝ TURNAJ PRO ŽÁKY VOŠKH</p>
+                <a href="#registrace" class="btn">ZAREGISTROVAT TÝM</a>
             </div>
         </div>
     </header>
 
-    <section id="info" class="section">
+    <section id="countdown-section">
         <div class="container">
-            <h2>O turnaji</h2>
-            <div class="info-grid">
-                <div class="info-card">
-                    <h3>Kde?</h3>
-                    <p>Sportovní hala <strong>Klimeška</strong>, Kutná Hora.</p>
-                </div>
-                <div class="info-card">
-                    <h3>Kdo?</h3>
-                    <p>Pouze pro registrované studenty <strong>VOŠKH</strong>.</p>
-                </div>
-                <div class="info-card">
-                    <h3>O co se hraje?</h3>
-                    <p>Vítězný tým získá prestižní pohár a věcné balíčky od partnerů.</p>
-                </div>
+            <h2 style="font-family: 'Bebas Neue'; letter-spacing: 3px; color: #888;">TURNAJ STARTUJE ZA</h2>
+            <div class="countdown" id="countdown">
+                <div class="unit"><div class="digit-box"><div class="digit" id="days">00</div></div><div class="unit-label">Dny</div></div>
+                <div class="unit"><div class="digit-box"><div class="digit" id="hours">00</div></div><div class="unit-label">Hodiny</div></div>
+                <div class="unit"><div class="digit-box"><div class="digit" id="minutes">00</div></div><div class="unit-label">Minuty</div></div>
+                <div class="unit"><div class="digit-box"><div class="digit" id="seconds">00</div></div><div class="unit-label">Sekundy</div></div>
             </div>
         </div>
     </section>
 
-    <section id="registrace" class="section">
-        <div class="container">
-            <h2>Registrace týmu</h2>
-            <form action="https://formspree.io/f/mbdaazaa" method="POST" class="reg-form">
-                
-                <label for="name">Jméno kapitána:</label>
-                <input type="text" name="Kapitán" id="name" placeholder="Jan Novák" required>
-                
-                <label for="email">Tvůj školní Email:</label>
-                <input type="email" name="Email" id="email" placeholder="student@voskh.cz" required>
-                
-                <label for="team">Název týmu:</label>
-                <input type="text" name="Tým" id="team" placeholder="Drim Tým 4.A" required>
+    <section class="container" style="padding: 100px 0;">
+        <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem;">O co v turnaji jde?</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Místo konání</h3>
+                <p>Hala Klimeška Kutná Hora. Špičkové zázemí a palubovka, kde hrají profíci. Vstup pouze v sálové obuvi!</p>
+            </div>
+            <div class="info-card">
+                <h3>Systém hry</h3>
+                <p>Turnaj je určen výhradně pro studenty VOŠKH. Týmy se utkají v základních skupinách a následném play-off.</p>
+            </div>
+            <div class="info-card">
+                <h3>Odměny</h3>
+                <p>Vítězný tým získá putovní pohár a hodnotné balíčky. Poražení však nemusí smutnit, atmosféra bude stát za to!</p>
+            </div>
+        </div>
+    </section>
 
-                <label for="message">Poznámka (volitelné):</label>
-                <textarea name="Zpráva" id="message" placeholder="Např. soupiska hráčů..."></textarea>
-                
-                <button type="submit" class="btn">Odeslat přihlášku</button>
+    <section id="registrace" class="reg-section">
+        <div class="container">
+            <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem; margin-bottom: 40px;">Registrace</h2>
+            <form action="https://formspree.io/f/TVŮJ_FORM_ID" method="POST" class="reg-form">
+                <input type="text" name="Kapitán" placeholder="Jméno a příjmení kapitána" required>
+                <input type="email" name="Email" placeholder="Školní email (@voskh.cz)" required>
+                <input type="text" name="Tým" placeholder="Název vašeho týmu" required>
+                <textarea name="Zpráva" rows="4" placeholder="Soupiska týmu a další info..."></textarea>
+                <button type="submit" class="btn" style="width: 100%;">ODESLAT PŘIHLÁŠKU</button>
             </form>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Basketbal VOŠKH - Hala Klimeška Kutná Hora</p>
+        <p>&copy; 2026 Basketbal VOŠKH | Kutná Hora</p>
     </footer>
 
+    <script>
+        const targetDate = new Date("June 15, 2026 09:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff <= 0) {
+                document.getElementById('countdown').innerHTML = "<h2>TURNAJ ZAČAL!</h2>";
+                return;
+            }
+
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = String(d).padStart(2, '0');
+            document.getElementById('hours').innerText = String(h).padStart(2, '0');
+            document.getElementById('minutes').innerText = String(m).padStart(2, '0');
+            document.getElementById('seconds').innerText = String(s).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+    </script>
 </body>
 </html>
