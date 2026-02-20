@@ -42,25 +42,25 @@
         </div>
     </section>
 
-    <section id="registrace" class="section">
-        <div class="container">
-            <h2>Registrace týmu</h2>
-            <form action="https://formspree.io/f/mbdaazaa" method="POST" class="reg-form">
-                
-                <label for="name">Jméno kapitána:</label>
-                <input type="text" name="Kapitán" id="name" placeholder="Jan Novák" required>
-                
-                <label for="email">Tvůj školní Email:</label>
-                <input type="email" name="Email" id="email" placeholder="student@voskh.cz" required>
-                
-                <label for="team">Název týmu:</label>
-                <input type="text" name="Tým" id="team" placeholder="Drim Tým 4.A" required>
+  
+            <form id="teamForm" class="reg-form">
+    <label for="name">Jméno kapitána:</label>
+    <input type="text" name="Kapitan" id="name" placeholder="Jan Novák" required>
+    
+    <label for="email">Tvůj školní Email:</label>
+    <input type="email" name="Email" id="email" placeholder="student@voskh.cz" required>
+    
+    <label for="team">Název týmu:</label>
+    <input type="text" name="Tym" id="team" placeholder="Drim Tým 4.A" required>
 
-                <label for="message">Poznámka (volitelné):</label>
-                <textarea name="Zpráva" id="message" placeholder="Např. soupiska hráčů..."></textarea>
-                
-                <button type="submit" class="btn">Odeslat přihlášku</button>
-            </form>
+    <label for="message">Poznámka (volitelné):</label>
+    <textarea name="Zprava" id="message" placeholder="Např. soupiska hráčů..."></textarea>
+    
+    <button type="submit" class="btn">Odeslat přihlášku</button>
+    
+    <p id="form-status" style="margin-top: 15px; font-weight: bold;"></p>
+</form>
+
         </div>
     </section>
 
@@ -69,4 +69,7 @@
     </footer>
 
 </body>
+<script src="script.js"></script>
+</body>
+
 </html>

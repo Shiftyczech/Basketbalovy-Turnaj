@@ -1,0 +1,8 @@
+{
+  "name": "voskh-cup",
+  "version": "1.0.0",
+  "description": "Registrace na basketbalový turnaj",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
