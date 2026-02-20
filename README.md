@@ -1,2 +1,2 @@
-# Basketbalov-Turnaj
+# Basketbalový-Turnaj
 Školní projekt
