@@ -13,11 +13,59 @@
             --orange-hover: #e64a19;
             --dark-bg: #0d0d0d;
             --card-bg: #1a1a1a;
+            --nav-bg: rgba(13, 13, 13, 0.98);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #fff; background-color: var(--dark-bg); }
         .container { width: 90%; max-width: 1100px; margin: auto; text-align: center; }
+        
+        /* --- NAVIGACE --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            border-bottom: 2px solid var(--orange);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%; 
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue';
+            font-size: 2.2rem;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .nav-logo span { color: var(--orange); }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Bebas Neue';
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover { color: var(--orange); }
         
         /* --- OPRAVA HEADERU (Obrázek už nebude uřízlý) --- */
         header {
@@ -25,21 +73,20 @@
                         url('https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
-            min-height: 80vh; /* Zvětšeno, aby obrázek vynikl */
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            padding-top: 100px;
         }
 
-        .logo { position: absolute; top: 30px; font-weight: 900; font-size: 1.8rem; letter-spacing: 2px; font-family: 'Bebas Neue'; }
-        .logo span { color: var(--orange); }
-
         .hero-content h1 { 
-            font-size: clamp(3rem, 8vw, 5rem); 
+            font-size: clamp(3.5rem, 10vw, 6rem); 
             text-transform: uppercase; 
             font-family: 'Bebas Neue', sans-serif;
-            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            line-height: 0.9;
+            margin-bottom: 10px;
         }
 
         /* --- ANIMACE PRO TLAČÍTKO --- */
@@ -47,13 +94,16 @@
             display: inline-block; 
             background: var(--orange); 
             color: white; 
-            padding: 18px 40px; 
+            padding: 20px 45px; 
             text-decoration: none; 
             border-radius: 50px; 
             font-weight: bold; 
             margin-top: 30px; 
-            transition: all 0.3s ease; 
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             box-shadow: 0 4px 15px rgba(255,87,34,0.3);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
         }
         .btn:hover { 
             background: var(--orange-hover); 
@@ -64,25 +114,31 @@
         /* --- ODPOČET --- */
         #countdown-section { 
             background: #000; 
-            padding: 60px 0; 
+            padding: 80px 0; 
             border-top: 4px solid var(--orange); 
         }
 
-        .countdown { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0; }
+        .countdown { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin: 2rem 0; }
+        
+        .unit { display: flex; flex-direction: column; align-items: center; }
         
         /* ANIMACE PRO ČÍSLA ODPOČTU */
         .digit-box { 
             background: var(--card-bg); 
-            border: 2px solid rgba(255,87,34,0.3); 
+            border: 2px solid rgba(255,87,34,0.2); 
             border-radius: 12px; 
-            padding: 1.5rem; 
-            min-width: 110px;
-            transition: border-color 0.3s ease;
+            padding: 2rem; 
+            min-width: 130px;
+            transition: all 0.4s ease;
         }
-        .digit-box:hover { border-color: var(--orange); }
+        .digit-box:hover { 
+            border-color: var(--orange);
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255,87,34,0.2);
+        }
 
-        .digit { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: #fff; line-height: 1; }
-        .unit-label { font-size: 0.8rem; letter-spacing: 0.2em; text-transform: uppercase; color: #888; }
+        .digit { font-family: 'Bebas Neue', sans-serif; font-size: 4.5rem; color: #fff; line-height: 1; }
+        .unit-label { font-size: 0.9rem; letter-spacing: 0.2em; text-transform: uppercase; color: #888; margin-top: 10px; }
 
         /* --- INFO KARTY S ANIMACÍ --- */
         .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
@@ -93,37 +149,75 @@
             border-radius: 15px; 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             border-bottom: 4px solid transparent;
+            text-align: left;
         }
         .info-card:hover { 
             transform: translateY(-15px); 
             background: #252525;
             border-bottom: 4px solid var(--orange);
         }
-        .info-card h3 { color: var(--orange); margin-bottom: 15px; font-family: 'Bebas Neue'; font-size: 1.8rem; }
+        .info-card h3 { color: var(--orange); margin-bottom: 15px; font-family: 'Bebas Neue'; font-size: 2rem; }
+        .info-card a { color: var(--orange); text-decoration: none; font-weight: bold; display: block; margin-top: 15px; }
 
         /* --- REGISTRACE --- */
         .reg-section { padding: 100px 0; background: #080808; }
         .reg-form { 
             max-width: 600px; margin: auto; background: var(--card-bg); padding: 40px; border-radius: 20px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         .reg-form input, .reg-form textarea { 
-            width: 100%; padding: 15px; margin-bottom: 20px; border: 1px solid #333; 
-            background: #0d0d0d; color: white; border-radius: 8px; outline: none; transition: 0.3s;
+            width: 100%; padding: 18px; margin-bottom: 20px; border: 1px solid #333; 
+            background: #0d0d0d; color: white; border-radius: 8px; outline: none; font-size: 1rem;
         }
-        .reg-form input:focus { border-color: var(--orange); box-shadow: 0 0 10px rgba(255,87,34,0.2); }
+        .reg-form input:focus { border-color: var(--orange); }
 
-        footer { padding: 50px; color: #444; }
+        /* --- TABULKA TÝMŮ --- */
+        .teams-section { padding: 100px 0; background: #0a0a0a; }
+        .teams-table { width: 100%; border-collapse: collapse; margin-top: 30px; background: var(--card-bg); border-radius: 15px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.3); }
+        .teams-table thead { background: var(--orange); }
+        .teams-table th { padding: 20px; text-align: left; font-weight: bold; color: #000; text-transform: uppercase; letter-spacing: 1px; }
+        .teams-table td { padding: 15px 20px; border-bottom: 1px solid #333; }
+        .teams-table tbody tr { transition: background 0.3s ease; }
+        .teams-table tbody tr:hover { background: #252525; }
+        .teams-table tbody tr:last-child td { border-bottom: none; }
+        .team-count { display: inline-block; background: var(--orange); color: #000; padding: 5px 15px; border-radius: 20px; font-weight: bold; margin-left: 10px; }
+        .no-teams { text-align: center; padding: 40px; color: #888; }
+        .expand-btn { background: var(--orange); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .expand-btn:hover { background: var(--orange-hover); }
+        .players-row { display: none; }
+        .players-row.show { display: table-row; }
+        .players-content { padding: 20px; background: #252525; }
+        .players-list { list-style: none; color: #ccc; }
+        .players-list li { padding: 8px 0; border-bottom: 1px solid #333; }
+        .players-list li:last-child { border-bottom: none; }
+
+        footer { padding: 50px; color: #444; border-top: 1px solid #222; }
+
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; padding: 15px; }
+            .nav-links { gap: 15px; margin-top: 10px; }
+        }
     </style>
 </head>
 <body>
 
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
+            <ul class="nav-links">
+                <li><a href="#countdown-section">Start</a></li>
+                <li><a href="informace.html">Informace</a></li>
+                <li><a href="misto.html">Místo</a></li>
+                <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="#registrace">Registrace</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <header>
-        <div class="logo">VOŠKH<span>CUP</span></div>
         <div class="container">
             <div class="hero-content">
                 <h1>Hala Klimeška<br>Kutná Hora</h1>
-                <p style="font-size: 1.2rem; letter-spacing: 2px;">BASKETBALOVÝ TURNAJ PRO ŽÁKY VOŠKH</p>
+                <p style="font-size: 1.4rem; letter-spacing: 3px; margin-top: 10px; color: rgba(255,255,255,0.8);">BASKETBALOVÝ TURNAJ PRO ŽÁKY VOŠKH</p>
                 <a href="#registrace" class="btn">ZAREGISTROVAT TÝM</a>
             </div>
         </div>
@@ -131,7 +225,7 @@
 
     <section id="countdown-section">
         <div class="container">
-            <h2 style="font-family: 'Bebas Neue'; letter-spacing: 3px; color: #888;">TURNAJ STARTUJE ZA</h2>
+            <h2 style="font-family: 'Bebas Neue'; letter-spacing: 3px; color: #888; font-size: 1.5rem;">TURNAJ STARTUJE ZA</h2>
             <div class="countdown" id="countdown">
                 <div class="unit"><div class="digit-box"><div class="digit" id="days">00</div></div><div class="unit-label">Dny</div></div>
                 <div class="unit"><div class="digit-box"><div class="digit" id="hours">00</div></div><div class="unit-label">Hodiny</div></div>
@@ -141,50 +235,72 @@
         </div>
     </section>
 
-    <section class="container" style="padding: 100px 0;">
-        <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem;">O co v turnaji jde?</h2>
+    <section id="informace" class="container" style="padding: 120px 0;">
+        <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 20px;">O co v turnaji jde?</h2>
         <div class="info-grid">
             <div class="info-card">
                 <h3>Místo konání</h3>
                 <p>Hala Klimeška Kutná Hora. Špičkové zázemí a palubovka, kde hrají profíci. Vstup pouze v sálové obuvi!</p>
+                <a href="misto.html">Zobrazit na mapě →</a>
             </div>
             <div class="info-card">
                 <h3>Systém hry</h3>
                 <p>Turnaj je určen výhradně pro studenty VOŠKH. Týmy se utkají v základních skupinách a následném play-off.</p>
+                <a href="informace.html">Pravidla →</a>
             </div>
             <div class="info-card">
                 <h3>Odměny</h3>
                 <p>Vítězný tým získá putovní pohár a hodnotné balíčky. Poražení však nemusí smutnit, atmosféra bude stát za to!</p>
+                <a href="odmeny.html">Seznam cen →</a>
             </div>
         </div>
+
+        <h2 style="font-family: 'Bebas Neue'; font-size: 3rem; margin-top: 80px;">Registrované týmy</h2>
+        <table class="teams-table">
+            <thead>
+                <tr>
+                    <th>Název týmu</th>
+                    <th>Kapitán</th>
+                    <th>Email</th>
+                    <th>Čas registrace</th>
+                    <th style="width: 100px;">Hráči</th>
+                </tr>
+            </thead>
+            <tbody id="teams-tbody">
+                <tr class="no-teams"><td colspan="5">Zatím není žádný registrovaný tým</td></tr>
+            </tbody>
+        </table>
     </section>
 
     <section id="registrace" class="reg-section">
         <div class="container">
-            <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem; margin-bottom: 40px;">Registrace</h2>
-            <form action="https://formspree.io/f/TVŮJ_FORM_ID" method="POST" class="reg-form">
-                <input type="text" name="Kapitán" placeholder="Jméno a příjmení kapitána" required>
-                <input type="email" name="Email" placeholder="Školní email (@voskh.cz)" required>
-                <input type="text" name="Tým" placeholder="Název vašeho týmu" required>
-                <textarea name="Zpráva" rows="4" placeholder="Soupiska týmu a další info..."></textarea>
+            <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 40px;">Registrace</h2>
+            <form id="registration-form" class="reg-form">
+                <input type="text" id="captain-name" name="Kapitán" placeholder="Jméno a příjmění kapitána" required>
+                <input type="email" id="captain-email" name="Email" placeholder="Školní email (@voskh.cz)" required>
+                <input type="text" id="team-name" name="Tým" placeholder="Název vašeho týmu" required>
+                <textarea id="players-list" name="Hráči" rows="3" placeholder="Seznam hráčů (každý na novém řádku)"></textarea>
                 <button type="submit" class="btn" style="width: 100%;">ODESLAT PŘIHLÁŠKU</button>
             </form>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Basketbal VOŠKH | Kutná Hora</p>
+        <p>&copy; 2026 Basketbalový Turnaj VOŠKH | Kutná Hora</p>
     </footer>
 
     <script>
         const targetDate = new Date("June 15, 2026 09:00:00").getTime();
+
+        // ===== GOOGLE SHEETS WEBHOOK =====
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6YanLWqA4GFcEE8mgkvQNS_Tn9Y4XmSqD-qZ348ewvfZpfZWEgdar1ES3FnMrfDMy/exec';
 
         function updateCountdown() {
             const now = new Date().getTime();
             const diff = targetDate - now;
 
             if (diff <= 0) {
-                document.getElementById('countdown').innerHTML = "<h2>TURNAJ ZAČAL!</h2>";
+                document.getElementById('countdown').innerHTML = "<h2 style='font-family:\"Bebas Neue\"; font-size: 3rem; color: var(--orange);'>TURNAJ PRÁVĚ ZAČAL!</h2>";
                 return;
             }
 
@@ -201,6 +317,162 @@
 
         setInterval(updateCountdown, 1000);
         updateCountdown();
+
+        // Teams Management with Google Sheets
+        let teams = [];
+
+        async function saveTeam(teamData) {
+            teamData.registrationTime = new Date().toLocaleString('cs-CZ');
+            
+            console.log('Saving team:', teamData);
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(teamData)
+                });
+                
+                console.log('Team saved successfully');
+                return true;
+            } catch (error) {
+                console.error('Error saving team:', error);
+                alert('Chyba při ukládání týmu: ' + error.message);
+                return false;
+            }
+        }
+
+        async function loadTeamsFromGoogle() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=get', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                const data = await response.json();
+                console.log('Teams loaded from Google:', data);
+                return data;
+            } catch (error) {
+                console.error('Error loading teams from Google:', error);
+                return [];
+            }
+        }
+
+        async function displayTeams() {
+            const tbody = document.getElementById('teams-tbody');
+
+            // Load teams from Google Sheets
+            const googleTeams = await loadTeamsFromGoogle();
+            teams = googleTeams && googleTeams.length > 0 ? googleTeams : [];
+
+            if (teams.length === 0) {
+                tbody.innerHTML = '<tr class="no-teams"><td colspan="5">Zatím není žádný registrovaný tým</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = teams.map((team, index) => {
+                const players = typeof team.players === 'string' 
+                    ? team.players.split(', ').filter(p => p.length > 0)
+                    : (Array.isArray(team.players) ? team.players : []);
+                
+                const playersHtml = players && players.length > 0 
+                    ? players.map(player => `<li>${player}</li>`).join('')
+                    : '<li style="color: #888;">Žádní hráči nezadáni</li>';
+                
+                // Format registration time
+                let registrationTime = team.registrationTime || '';
+                if (registrationTime.includes('T') || registrationTime.includes('Z')) {
+                    // ISO format - convert to Czech format
+                    try {
+                        const date = new Date(registrationTime);
+                        registrationTime = date.toLocaleString('cs-CZ');
+                    } catch (e) {
+                        // Keep original if parsing fails
+                    }
+                }
+                
+                return `
+                    <tr>
+                        <td><strong>${team.teamName || ''}</strong></td>
+                        <td>${team.captainName || ''}</td>
+                        <td>${team.email || ''}</td>
+                        <td>${registrationTime}</td>
+                        <td><button class="expand-btn" onclick="togglePlayers(${index})">Zobrazit</button></td>
+                    </tr>
+                    <tr class="players-row" id="players-${index}">
+                        <td colspan="5">
+                            <div class="players-content">
+                                <strong style="color: var(--orange);">Soupiska týmu:</strong>
+                                <ul class="players-list">
+                                    ${playersHtml}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Reattach event listeners after DOM update
+            document.querySelectorAll('.expand-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+        }
+
+        function togglePlayers(index) {
+            const row = document.getElementById(`players-${index}`);
+            const btn = event.target;
+            row.classList.toggle('show');
+            btn.textContent = row.classList.contains('show') ? 'Skrýt' : 'Zobrazit';
+        }
+
+        // Initialize when DOM is ready
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Content Loaded - Initializing teams');
+            
+            // Load teams on page load
+            displayTeams();
+
+            // Refresh teams every 5 seconds from Google Sheets
+            setInterval(() => {
+                console.log('Refreshing teams from Google Sheets...');
+                displayTeams();
+            }, 5000);
+
+            // Attach form submit listener
+            document.getElementById('registration-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const playersText = document.getElementById('players-list').value;
+                const players = playersText
+                    .split('\n')
+                    .map(player => player.trim())
+                    .filter(player => player.length > 0);
+
+                const teamData = {
+                    teamName: document.getElementById('team-name').value,
+                    captainName: document.getElementById('captain-name').value,
+                    email: document.getElementById('captain-email').value,
+                    players: players,
+                    registrationTime: new Date().toLocaleString('cs-CZ')
+                };
+
+                console.log('Submitting team data:', teamData);
+                
+                // Send to Google Sheets
+                await saveTeam(teamData);
+
+                // Reset form
+                this.reset();
+                alert('Tým byl úspěšně zaregistrován!');
+                
+                // Refresh teams display immediately
+                setTimeout(() => displayTeams(), 1000);
+            });
+        });
     </script>
 </body>
 </html>

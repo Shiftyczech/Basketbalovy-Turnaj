@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podrobná Pravidla | VOŠKH CUP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --orange: #FF5722;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --nav-bg: rgba(13, 13, 13, 0.98);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #fff; background-color: var(--dark-bg); }
+        .container { width: 90%; max-width: 900px; margin: auto; }
+
+        /* --- NAVIGACE --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            border-bottom: 2px solid var(--orange);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue';
+            font-size: 2.2rem;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .nav-logo span { color: var(--orange); }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Bebas Neue';
+            font-size: 1.4rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--orange); }
+
+        /* --- OBSAH --- */
+        header.info-header {
+            padding: 150px 0 50px;
+            text-align: center;
+        }
+
+        header.info-header h1 {
+            font-family: 'Bebas Neue';
+            font-size: clamp(3rem, 10vw, 5rem);
+            color: var(--orange);
+        }
+
+        .content-section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border-left: 5px solid var(--orange);
+        }
+
+        .content-section h2 {
+            font-family: 'Bebas Neue';
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .content-section p, .content-section li {
+            color: #ccc;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .rule-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .rule-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .rule-list li::before {
+            content: "🏀";
+            margin-right: 15px;
+        }
+
+        .highlight {
+            color: var(--orange);
+            font-weight: bold;
+        }
+
+        .important-box {
+            background: rgba(255, 87, 34, 0.1);
+            border: 1px dashed var(--orange);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        footer { padding: 50px; text-align: center; color: #444; }
+
+        @media (max-width: 600px) {
+            .content-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
+            <div class="nav-links">
+                <a href="index.html">← ZPĚT</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header class="info-header">
+            <h1>PODROBNÉ INFORMACE</h1>
+            <p style="color: #888; letter-spacing: 2px;">VŠE, CO POTŘEBUJEŠ VĚDĚT PŘED TURNAJEM</p>
+        </header>
+
+        <section class="content-section">
+            <h2>Pravidla hry</h2>
+            <ul class="rule-list">
+                <li>Hraje se podle platných pravidel FIBA s drobnými úpravami pro školní turnaj.</li>
+                <li><span class="highlight">Hrací čas:</span> 2 x 10 minut hrubého času (poslední minuta druhého poločasu se stopuje).</li>
+                <li><span class="highlight">Týmy:</span> Maximálně 5 hráčů na hřišti + náhradníci (celkem max. 10 na soupisce).</li>
+                <li><span class="highlight">Fauly:</span> Hráč se vyfauluje po 5. osobní chybě. Týmové fauly se sčítají, po 4. faulu v poločase následují trestné hody.</li>
+                <li>V případě remízy následuje 3minutové prodloužení.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>Harmonogram dne</h2>
+            <ul class="rule-list">
+                <li><span class="highlight">08:30 – 09:00</span> | Sraz týmů a prezence v Hale Klimeška.</li>
+                <li><span class="highlight">09:00 – 09:15</span> | Oficiální zahájení a losování skupin.</li>
+                <li><span class="highlight">09:30 – 13:00</span> | Zápasy v základních skupinách.</li>
+                <li><span class="highlight">13:30 – 15:30</span> | Play-off a finálový pavouk.</li>
+                <li><span class="highlight">16:00</span> | Vyhlášení vítězů a předání cen.</li>
+            </ul>
+        </section>
+
+        <section class="content-section">
+            <h2>Vybavení a bezpečnost</h2>
+            <div class="important-box">
+                <p><strong>DŮLEŽITÉ:</strong> Bez řádné sálové obuvi (non-marking) nebude hráč vpuštěn na palubovku! Hala Klimeška má přísná pravidla pro čistotu povrchu.</p>
+            </div>
+            <ul class="rule-list">
+                <li>Každý tým by měl mít jednotnou barvu triček (pokud nemáte dresy, škola zapůjčí rozlišovací sety).</li>
+                <li>Šatny budou k dispozici, ale za cennosti si ručí každý účastník sám.</li>
+                <li>Na místě bude přítomen zdravotník pro případ drobných ošetření.</li>
+            </ul>
+        </section>
+
+        <div style="text-align: center; margin-bottom: 50px;">
+            <p>Máš další dotazy? Kontaktuj organizátory přes školní email.</p>
+            <a href="index.html#registrace" style="color: var(--orange); text-decoration: none; font-weight: bold; font-size: 1.2rem;">ZPĚT NA REGISTRACI</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Basketbal VOŠKH | Kutná Hora</p>
+    </footer>
+
+</body>
+</html>

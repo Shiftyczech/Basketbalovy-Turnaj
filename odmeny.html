@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odměny | VOŠKH CUP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --orange: #FF5722;
+            --gold: #FFD700;
+            --silver: #C0C0C0;
+            --bronze: #CD7F32;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --nav-bg: rgba(13, 13, 13, 0.98);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #fff; background-color: var(--dark-bg); overflow-x: hidden; }
+        .container { width: 90%; max-width: 1100px; margin: auto; text-align: center; }
+
+        /* --- NAVIGACE (Stejná jako na hlavní stránce) --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--nav-bg);
+            z-index: 1000;
+            border-bottom: 2px solid var(--orange);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+        }
+
+        .nav-logo {
+            font-family: 'Bebas Neue';
+            font-size: 2.2rem;
+            text-decoration: none;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .nav-logo span { color: var(--orange); }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Bebas Neue';
+            font-size: 1.4rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--orange); }
+
+        /* --- HERO SEKCE --- */
+        .rewards-hero {
+            padding: 150px 0 60px;
+            background: linear-gradient(to bottom, #1a1a1a, #0d0d0d);
+        }
+
+        .rewards-hero h1 {
+            font-family: 'Bebas Neue';
+            font-size: clamp(4rem, 12vw, 7rem);
+            line-height: 1;
+            color: var(--orange);
+            text-shadow: 0 0 30px rgba(255, 87, 34, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        /* --- KARTY ODMĚN --- */
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 60px 0;
+        }
+
+        .reward-card {
+            background: var(--card-bg);
+            padding: 50px 30px;
+            border-radius: 20px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #222;
+        }
+
+        .reward-card:hover {
+            transform: translateY(-15px);
+            border-color: var(--orange);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .place-badge {
+            font-family: 'Bebas Neue';
+            font-size: 5rem;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            opacity: 0.2;
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .reward-card h2 {
+            font-family: 'Bebas Neue';
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .reward-list {
+            list-style: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .reward-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #222;
+            color: #ccc;
+        }
+
+        .reward-list li::before {
+            content: "✓";
+            color: var(--orange);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* Speciální styly pro barvy umístění */
+        .gold { border-top: 5px solid var(--gold); }
+        .gold h2, .gold .place-badge { color: var(--gold); }
+        
+        .silver { border-top: 5px solid var(--silver); }
+        .silver h2, .silver .place-badge { color: var(--silver); }
+
+        .bronze { border-top: 5px solid var(--bronze); }
+        .bronze h2, .bronze .place-badge { color: var(--bronze); }
+
+        /* --- ZPĚT TLAČÍTKO --- */
+        .back-btn {
+            display: inline-block;
+            margin: 40px 0;
+            color: #888;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: #fff; }
+
+        footer { padding: 50px; color: #444; border-top: 1px solid #222; margin-top: 50px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
+            <div class="nav-links">
+                <a href="index.html">← ZPĚT NA HLAVNÍ STRANU</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="rewards-hero">
+            <h1>WINNER TAKES ALL</h1>
+            <p class="subtitle">Přehled cen pro vítězné týmy</p>
+        </section>
+
+        <div class="rewards-grid">
+            <div class="reward-card gold">
+                <span class="place-badge">1ST</span>
+                <span class="icon">🏆</span>
+                <h2>Vítězové</h2>
+                <ul class="reward-list">
+                    <li>Velký putovní pohár VOŠKH</li>
+                    <li>Zlaté medaile pro celý tým</li>
+                    <li>Dárkový koš s merchem školy</li>
+                    <li>Voucher do místní pizzerie</li>
+                </ul>
+            </div>
+
+            <div class="reward-card silver">
+                <span class="place-badge">2ND</span>
+                <span class="icon">🥈</span>
+                <h2>Finalisté</h2>
+                <ul class="reward-list">
+                    <li>Stříbrné medaile</li>
+                    <li>Balíček sportovní výživy</li>
+                    <li>Energy drinky pro celý tým</li>
+                    <li>Diplom za skvělý výkon</li>
+                </ul>
+            </div>
+
+            <div class="reward-card bronze">
+                <span class="place-badge">3RD</span>
+                <span class="icon">🥉</span>
+                <h2>Bronzový tým</h2>
+                <ul class="reward-list">
+                    <li>Bronzové medaile</li>
+                    <li>Sada basketbalových doplňků</li>
+                    <li>Sladká odměna pro tým</li>
+                    <li>Diplom</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="reward-card" style="max-width: 600px; margin: 0 auto; border-top: 5px solid var(--orange);">
+            <span class="icon">🔥</span>
+            <h2>MVP - Hráč turnaje</h2>
+            <p>Individuální ocenění pro nejužitečnějšího hráče, kterého zvolí porota složená z učitelů tělesné výchovy.</p>
+            <ul class="reward-list" style="margin-top: 15px;">
+                <li>Speciální trofej MVP</li>
+                <li>Basketbalový míč Spalding</li>
+            </ul>
+        </div>
+
+        <a href="index.html" class="back-btn">Zpět na registraci týmu</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Basketbal VOŠKH | Kutná Hora</p>
+    </footer>
+
+</body>
+</html>
