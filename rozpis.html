@@ -722,6 +722,95 @@
             });
         }, { threshold: 0.08 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ===== GOOGLE SHEETS – načtení týmů pro rozpis =====
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6YanLWqA4GFcEE8mgkvQNS_Tn9Y4XmSqD-qZ348ewvfZpfZWEgdar1ES3FnMrfDMy/exec';
+
+        async function loadTeamsForSchedule() {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=get', { method: 'GET', mode: 'cors' });
+                const data = await response.json();
+                return Array.isArray(data) ? data : [];
+            } catch (e) {
+                console.warn('Nepodařilo se načíst týmy pro rozpis:', e);
+                return [];
+            }
+        }
+
+        function setGroupTeamName(groupIndex, rowIndex, name) {
+            const cards = document.querySelectorAll('.group-card');
+            if (!cards[groupIndex]) return;
+            const rows = cards[groupIndex].querySelectorAll('tbody tr');
+            if (!rows[rowIndex]) return;
+            const span = rows[rowIndex].querySelector('.team-name');
+            if (span) span.textContent = name;
+        }
+
+        // Aktualizace zápasových karet – nahradí placeholder text skutečným jménem
+        function updateMatchLabel(placeholderText, realName) {
+            document.querySelectorAll('.team-side-name').forEach(el => {
+                if (el.textContent.trim() === placeholderText) {
+                    el.textContent = realName;
+                    el.classList.remove('tbd');
+                }
+            });
+        }
+
+        // Aktualizace bracket (pavouk) – bt-name texty
+        function updateBracketLabel(placeholderText, realName) {
+            document.querySelectorAll('.bt-name').forEach(el => {
+                if (el.textContent.trim() === placeholderText) {
+                    el.textContent = realName;
+                }
+            });
+        }
+
+        async function renderScheduleFromSheets() {
+            const teams = await loadTeamsForSchedule();
+            if (!teams || teams.length === 0) return;
+
+            // Rozdělení do skupin: první 4 → Skupina A, dalších 4 → Skupina B
+            const groupA = teams.slice(0, 4);
+            const groupB = teams.slice(4, 8);
+
+            // --- Skupinové tabulky ---
+            groupA.forEach((team, i) => setGroupTeamName(0, i, team.teamName || `Tým A${i + 1}`));
+            groupB.forEach((team, i) => setGroupTeamName(1, i, team.teamName || `Tým B${i + 1}`));
+
+            // Jména pro substituce v harmonogramu a pavouku
+            const a1 = groupA[0]?.teamName || 'Skupina A – Tým 1';
+            const a2 = groupA[1]?.teamName || 'Skupina A – Tým 2';
+            const a3 = groupA[2]?.teamName || 'Skupina A – Tým 3';
+            const a4 = groupA[3]?.teamName || 'Skupina A – Tým 4';
+            const b1 = groupB[0]?.teamName || 'Skupina B – Tým 1';
+            const b2 = groupB[1]?.teamName || 'Skupina B – Tým 2';
+            const b3 = groupB[2]?.teamName || 'Skupina B – Tým 3';
+            const b4 = groupB[3]?.teamName || 'Skupina B – Tým 4';
+
+            // --- Harmonogram zápasů ---
+            updateMatchLabel('Skupina A – Tým 1', a1);
+            updateMatchLabel('Skupina A – Tým 2', a2);
+            updateMatchLabel('Skupina A – Tým 3', a3);
+            updateMatchLabel('Skupina A – Tým 4', a4);
+            updateMatchLabel('Skupina B – Tým 1', b1);
+            updateMatchLabel('Skupina B – Tým 2', b2);
+            updateMatchLabel('Skupina B – Tým 3', b3);
+            updateMatchLabel('Skupina B – Tým 4', b4);
+
+            // --- Pavouk (play-off) – zástupné texty jsou pozice skupin, ne jména, ty se doplní až po výsledcích ---
+            // Přesto aktualizujeme s přesným formátem "1. místo Skupiny A" → ponecháme jako je,
+            // ale pokud máme jen 1 nebo 2 týmy ve skupině, napíšeme jméno přímo.
+            if (groupA.length === 1) {
+                updateBracketLabel('1. místo Skupiny A', a1);
+                updateBracketLabel('2. místo Skupiny A', '–');
+            }
+            if (groupB.length === 1) {
+                updateBracketLabel('1. místo Skupiny B', b1);
+                updateBracketLabel('2. místo Skupiny B', '–');
+            }
+        }
+
+        renderScheduleFromSheets();
     </script>
 </body>
 </html>

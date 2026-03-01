@@ -872,7 +872,7 @@
                 </div>
                 <div class="field">
                     <label for="captain-email">Školní email</label>
-                    <input type="email" id="captain-email" name="Email" placeholder="jmeno@voskh.cz" required>
+                    <input type="email" id="captain-email" name="Email" placeholder="jmeno@student.voskh.cz" required>
                 </div>
                 <div class="field">
                     <label for="team-name">Název týmu</label>
@@ -894,7 +894,7 @@
             <div class="faq-list">
                 <div class="faq-item">
                     <button class="faq-question">Kdo se může turnaje zúčastnit? <span class="faq-icon">+</span></button>
-                    <div class="faq-answer">Turnäj je určen výlučně pro studenty a žáky Vyšší odborné školy a Střední školy Kutná Hora (VOŠKH). Při registraci je vyžadován školní email (@voskh.cz).</div>
+                    <div class="faq-answer">Turnäj je určen výlučně pro studenty a žáky Vyšší odborné školy a Střední školy Kutná Hora (VOŠKH). Při registraci je vyžadován školní email (@student.voskh.cz).</div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question">Kolik hráčů tvoří jeden tým? <span class="faq-icon">+</span></button>
@@ -1132,6 +1132,7 @@
                 badge.style.display = 'none';
             }
             if (typeof window.updateProgressBar === 'function') window.updateProgressBar(teams.length);
+            if (typeof window.renderMVP === 'function') window.renderMVP();
 
             if (teams.length === 0) {
                 tbody.innerHTML = '<tr class="no-teams"><td colspan="5">Zatím není žádný registrovaný tým</td></tr>';
@@ -1361,6 +1362,79 @@
                 document.getElementById('prog-fill').style.width = pct + '%';
             };
 
+            // ----- MVP HLASOVÁNÍ – hráči z Google Sheets -----
+            window.renderMVP = function() {
+                const grid = document.getElementById('mvp-grid');
+                const statusNote = document.getElementById('mvp-status-note');
+                if (!grid) return;
+
+                // Sbírám všechny hráče ze všech registrovaných týmů
+                const allPlayers = [];
+                teams.forEach(team => {
+                    const players = typeof team.players === 'string'
+                        ? team.players.split(', ').filter(p => p.trim().length > 0)
+                        : (Array.isArray(team.players) ? team.players : []);
+                    players.forEach(player => {
+                        if (player.trim()) {
+                            allPlayers.push({ name: player.trim(), team: team.teamName || '' });
+                        }
+                    });
+                });
+
+                if (allPlayers.length === 0) {
+                    grid.innerHTML = '<p style="color:#555; text-align:center; grid-column:1/-1; padding:40px 20px;">Hráči budou dostupní po registraci týmů.</p>';
+                    return;
+                }
+
+                const votedKey = localStorage.getItem('mvp-vote');
+                const hasVoted = !!votedKey;
+
+                grid.innerHTML = allPlayers.map(p => {
+                    const key = p.name + '|' + p.team;
+                    const isVoted = votedKey === key;
+                    const isDisabled = hasVoted && !isVoted;
+                    return `
+                        <div class="mvp-card${isVoted ? ' voted' : ''}${isDisabled ? ' disabled' : ''}"
+                             style="background:var(--card-bg);border:1px solid #2a2a2a;border-radius:14px;padding:22px 16px 18px;text-align:center;cursor:${isDisabled ? 'default' : 'pointer'};position:relative;transition:all 0.3s ease;"
+                             onclick="castMVPVote('${key.replace(/'/g,"\\'")}')">
+                            <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,87,34,0.15);border:2px solid ${isVoted ? 'var(--orange)' : '#333'};display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:'Bebas Neue';font-size:1.6rem;color:var(--orange);">
+                                ${p.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;color:${isVoted ? 'var(--orange)' : '#fff'};">
+                                ${p.name}
+                            </div>
+                            <div style="font-size:0.75rem;color:#666;letter-spacing:0.05em;margin-bottom:14px;">
+                                ${p.team}
+                            </div>
+                            <button style="background:${isVoted ? 'var(--orange)' : (isDisabled ? '#222' : 'transparent')};color:${isVoted ? '#fff' : (isDisabled ? '#444' : 'var(--orange)')};border:1px solid ${isVoted ? 'var(--orange)' : (isDisabled ? '#2a2a2a' : 'var(--orange)')};border-radius:50px;padding:6px 18px;font-size:0.78rem;font-weight:700;cursor:${isDisabled ? 'default' : 'pointer'};transition:all 0.3s;" ${isDisabled ? 'disabled' : ''}>
+                                ${isVoted ? '✓ Tvůj hlas' : 'Hlasovat'}
+                            </button>
+                        </div>`;
+                }).join('');
+
+                if (statusNote) {
+                    if (hasVoted) {
+                        statusNote.textContent = '✓ Hlasoval jsi pro: ' + votedKey.split('|')[0];
+                        statusNote.style.color = 'var(--orange)';
+                        statusNote.style.marginTop = '20px';
+                        statusNote.style.fontWeight = '700';
+                    } else {
+                        statusNote.textContent = '';
+                    }
+                }
+            };
+
+            window.castMVPVote = function(key) {
+                if (localStorage.getItem('mvp-vote')) return; // already voted
+                localStorage.setItem('mvp-vote', key);
+                const playerName = key.split('|')[0];
+                showToast('✓ Hlasoval jsi pro ' + playerName + '!');
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, colors: ['#FF5722', '#fff', '#FFD54F'] });
+                }
+                window.renderMVP();
+            };
+
             displayTeams();
 
             document.getElementById('registration-form').addEventListener('submit', async function (e) {
@@ -1368,9 +1442,9 @@
 
                 // Validace školního emailu
                 const emailInput = document.getElementById('captain-email');
-                if (!emailInput.value.toLowerCase().endsWith('@voskh.cz')) {
+                if (!emailInput.value.toLowerCase().endsWith('@student.voskh.cz')) {
                     emailInput.focus();
-                    showToast('Zadej prosím školní email (@voskh.cz).', true);
+                    showToast('Zadej prosím školní email (@student.voskh.cz).', true);
                     return;
                 }
 
@@ -1435,63 +1509,6 @@
             } catch(e) { /* skryj widget při chybě */ }
         })();
 
-        // ===== MVP HLASOVÁNÍ =====
-        (function initMVP() {
-            const CANDIDATES = [
-                { id:'p1', name:'Jan Novák',    team:'TÝM A', emoji:'🏀' },
-                { id:'p2', name:'Petr Suchý',   team:'TÝM B', emoji:'⛹️' },
-                { id:'p3', name:'Tomáš Blažek', team:'TÝM C', emoji:'🔥' },
-                { id:'p4', name:'Lukáš Dvořák', team:'TÝM D', emoji:'💪' },
-                { id:'p5', name:'Martin Krejčí',team:'TÝM E', emoji:'🎯' },
-                { id:'p6', name:'Ondřej Havel', team:'TÝM F', emoji:'⚡' },
-            ];
-            // Upravte jména kandidátů dle skutečné soupisky před turnajem
-            const VOTES_KEY = 'mvp-votes-voskh-2026';
-            const MY_VOTE_KEY = 'mvp-my-vote-voskh-2026';
-
-            let votes = JSON.parse(localStorage.getItem(VOTES_KEY) || '{}');
-            let myVote = localStorage.getItem(MY_VOTE_KEY);
-
-            function totalVotes() { return Object.values(votes).reduce(function(a,b){return a+b;},0); }
-
-            function render() {
-                const grid = document.getElementById('mvp-grid');
-                if (!grid) return;
-                const total = totalVotes();
-                grid.innerHTML = CANDIDATES.map(function(c) {
-                    const count = votes[c.id] || 0;
-                    const pct = total > 0 ? Math.round((count / total) * 100) : 0;
-                    const isVoted = myVote === c.id;
-                    const hasVoted = !!myVote;
-                    return '<div class="mvp-card' + (isVoted ? ' voted' : '') + (hasVoted && !isVoted ? ' disabled' : '') + '"'
-                        + ' onclick="' + (!hasVoted ? 'castMVP(\'' + c.id + '\')' : '') + '"'
-                        + ' role="button" tabindex="0" aria-label="Hlasovat pro ' + c.name + '">'
-                        + '<div class="mvp-avatar">' + c.emoji + '</div>'
-                        + '<div class="mvp-name">' + c.name + '</div>'
-                        + '<div class="mvp-team">' + c.team + '</div>'
-                        + '<div class="mvp-bar-wrap"><div class="mvp-bar" style="width:' + (hasVoted ? pct : 0) + '%"></div></div>'
-                        + '<div class="mvp-votes">' + (hasVoted ? pct + '% (' + count + ' hl.)' : 'Klikni pro hlasování') + '</div>'
-                        + '</div>';
-                }).join('');
-                const note = document.getElementById('mvp-status-note');
-                if (note && myVote) {
-                    const winner = CANDIDATES.find(function(c){return c.id===myVote;});
-                    note.textContent = '✓ Hlasoval/a jsi pro: ' + (winner ? winner.name : '') + '. Díky za hlas!';
-                }
-            }
-
-            window.castMVP = function(id) {
-                if (myVote) return;
-                votes[id] = (votes[id] || 0) + 1;
-                myVote = id;
-                localStorage.setItem(VOTES_KEY, JSON.stringify(votes));
-                localStorage.setItem(MY_VOTE_KEY, id);
-                render();
-                showToast('🏆 Tvůj hlas byl zaznamenán!');
-            };
-
-            render();
-        })();
     </script>
 </body>
 </html>
