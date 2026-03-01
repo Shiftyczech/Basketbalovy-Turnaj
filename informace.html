@@ -6,6 +6,7 @@
     <title>Podrobná Pravidla | VOŠKH CUP</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <style>
         :root {
@@ -128,10 +129,51 @@
             margin: 20px 0;
         }
 
-        footer { padding: 50px; text-align: center; color: #444; }
+        footer { padding: 60px 20px; background: #080808; border-top: 2px solid #1e1e1e; }
+        .footer-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--orange); font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-col p, .footer-col a { color: #666; font-size: 0.9rem; line-height: 1.9; text-decoration: none; display: block; }
+        .footer-col a:hover { color: var(--orange); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #1a1a1a; color: #333; font-size: 0.85rem; }
+
+        /* --- HAMBURGER MENU --- */
+        .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 5px; }
+        .hamburger span { display: block; width: 26px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s ease; }
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .nav-links a.active { color: var(--orange); }
+
+        /* --- SCROLL ANIMACE --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- PRINT TLAČÍTKO --- */
+        .print-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 12px 28px; background: transparent; color: var(--orange); border: 2px solid var(--orange); border-radius: 50px; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+        .print-btn:hover { background: var(--orange); color: #fff; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-container { padding: 15px 5%; }
+            .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid #222; padding: 10px 0; }
+            .nav-links.open { display: flex; }
+            .nav-links li a { display: block; padding: 14px 5%; border-bottom: 1px solid #1a1a1a; }
+        }
 
         @media (max-width: 600px) {
             .content-section { padding: 20px; }
+        }
+
+        @media print {
+            nav, footer, .print-btn { display: none !important; }
+            body { background: white; color: black; }
+            .content-section { background: white; border-left-color: #FF5722; page-break-inside: avoid; }
+            .content-section h2 { color: #333; }
+            .content-section p, .content-section li { color: #333; }
+            .highlight { color: #FF5722; }
+            .important-box { background: #fff8f5; border: 1px solid #FF5722; }
+            header.info-header h1 { color: #FF5722; }
         }
     </style>
 </head>
@@ -140,11 +182,17 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Start</a></li>
-                <li><a href="informace.html">Informace</a></li>
+                <li><a href="informace.html" class="active">Informace</a></li>
                 <li><a href="misto.html">Místo</a></li>
                 <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="rozpis.html">Rozpis</a></li>
+                <li><a href="galerie.html">Galerie</a></li>
+                <li><a href="faq.html">FAQ</a></li>
                 <li><a href="index.html#registrace">Registrace</a></li>
             </ul>
         </div>
@@ -156,7 +204,7 @@
             <p style="color: #888; letter-spacing: 2px;">VŠE, CO POTŘEBUJEŠ VĚDĚT PŘED TURNAJEM</p>
         </header>
 
-        <section class="content-section">
+        <section class="content-section reveal">
             <h2>Pravidla hry</h2>
             <ul class="rule-list">
                 <li>Hraje se podle platných pravidel FIBA s drobnými úpravami pro školní turnaj.</li>
@@ -167,7 +215,7 @@
             </ul>
         </section>
 
-        <section class="content-section">
+        <section class="content-section reveal">
             <h2>Harmonogram dne</h2>
             <ul class="rule-list">
                 <li><span class="highlight">08:30 – 09:00</span> | Sraz týmů a prezence v Hale Klimeška.</li>
@@ -178,7 +226,7 @@
             </ul>
         </section>
 
-        <section class="content-section">
+        <section class="content-section reveal">
             <h2>Vybavení a bezpečnost</h2>
             <div class="important-box">
                 <p><strong>DŮLEŽITÉ:</strong> Bez řádné sálové obuvi (non-marking) nebude hráč vpuštěn na palubovku! Hala Klimeška má přísná pravidla pro čistotu povrchu.</p>
@@ -190,15 +238,65 @@
             </ul>
         </section>
 
-        <div style="text-align: center; margin-bottom: 50px;">
-            <p>Máš další dotazy? Kontaktuj organizátory přes školní email.</p>
-            <a href="index.html#registrace" style="color: var(--orange); text-decoration: none; font-weight: bold; font-size: 1.2rem;">ZPĚT NA REGISTRACI</a>
+        <div style="text-align: center; margin-bottom: 50px;" class="reveal">
+            <p style="color: #888;">Máš další dotazy? Zkus naše <a href="faq.html" style="color: var(--orange);">FAQ</a> nebo kontaktuj organizátory přes školní email.</p>
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+                <a href="index.html#registrace" style="display:inline-flex; align-items:center; gap:8px; color:#fff; background:var(--orange); text-decoration:none; font-weight:bold; padding:12px 28px; border-radius:50px;"><i class="fas fa-basketball-ball"></i> ZAREGISTROVAT TÝM</a>
+                <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> VYTISKNOUT PRAVIDLA</button>
+            </div>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2026 Basketbal VOŠKH | Kutná Hora</p>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>VOŠKH CUP</h4>
+                <p>Basketbalový turnaj pro studenty Vyšší odborné školy a Střední školy Kutná Hora.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Rychlé odkazy</h4>
+                <a href="informace.html">Informace &amp; pravidla</a>
+                <a href="misto.html">Místo konání</a>
+                <a href="odmeny.html">Odměny</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#registrace">Registrace</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <p>VOŠKH Kutná Hora</p>
+                <p>Hala Klimeška</p>
+                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Basketbalový Turnaj VOŠKH &mdash; Kutná Hora
+        </div>
     </footer>
 
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            const isOpen = hamburger.classList.toggle('open');
+            navLinks.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            hamburger.setAttribute('aria-label', isOpen ? 'Zavřít menu' : 'Otevřít menu');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 120);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>

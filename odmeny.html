@@ -175,7 +175,35 @@
         }
         .back-btn:hover { color: #fff; }
 
-        footer { padding: 50px; color: #444; border-top: 1px solid #222; margin-top: 50px; }
+        /* --- HAMBURGER MENU --- */
+        .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 5px; }
+        .hamburger span { display: block; width: 26px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s ease; }
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .nav-links a.active { color: var(--orange); }
+
+        /* --- SCROLL ANIMACE --- */
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- FOOTER --- */
+        footer { padding: 60px 20px; color: #555; background: #080808; border-top: 2px solid #1e1e1e; margin-top: 0; }
+        .footer-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--orange); font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-col p, .footer-col a { color: #666; font-size: 0.9rem; line-height: 1.9; text-decoration: none; display: block; }
+        .footer-col a:hover { color: var(--orange); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #1a1a1a; color: #333; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-container { padding: 15px 5%; }
+            .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid #222; padding: 10px 0; }
+            .nav-links.open { display: flex; }
+            .nav-links li a { display: block; padding: 14px 5%; border-bottom: 1px solid #1a1a1a; }
+            .rewards-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -183,11 +211,17 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Start</a></li>
                 <li><a href="informace.html">Informace</a></li>
                 <li><a href="misto.html">Místo</a></li>
-                <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="odmeny.html" class="active">Odměny</a></li>
+                <li><a href="rozpis.html">Rozpis</a></li>
+                <li><a href="galerie.html">Galerie</a></li>
+                <li><a href="faq.html">FAQ</a></li>
                 <li><a href="index.html#registrace">Registrace</a></li>
             </ul>
         </div>
@@ -200,7 +234,7 @@
         </section>
 
         <div class="rewards-grid">
-            <div class="reward-card gold">
+            <div class="reward-card gold reveal">
                 <span class="place-badge">1ST</span>
                 <span class="icon">🏆</span>
                 <h2>Vítězové</h2>
@@ -212,7 +246,7 @@
                 </ul>
             </div>
 
-            <div class="reward-card silver">
+            <div class="reward-card silver reveal">
                 <span class="place-badge">2ND</span>
                 <span class="icon">🥈</span>
                 <h2>Finalisté</h2>
@@ -224,7 +258,7 @@
                 </ul>
             </div>
 
-            <div class="reward-card bronze">
+            <div class="reward-card bronze reveal">
                 <span class="place-badge">3RD</span>
                 <span class="icon">🥉</span>
                 <h2>Bronzový tým</h2>
@@ -237,7 +271,7 @@
             </div>
         </div>
 
-        <div class="reward-card" style="max-width: 600px; margin: 0 auto; border-top: 5px solid var(--orange);">
+        <div class="reward-card reveal" style="max-width: 600px; margin: 0 auto; border-top: 5px solid var(--orange);">
             <span class="icon">🔥</span>
             <h2>MVP - Hráč turnaje</h2>
             <p>Individuální ocenění pro nejužitečnějšího hráče, kterého zvolí porota složená z učitelů tělesné výchovy.</p>
@@ -247,12 +281,59 @@
             </ul>
         </div>
 
-        <a href="index.html" class="back-btn">Zpět na registraci týmu</a>
+        <a href="index.html" class="back-btn">← Zpět na registraci týmu</a>
     </main>
 
     <footer>
-        <p>&copy; 2026 Basketbal VOŠKH | Kutná Hora</p>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>VOŠKH CUP</h4>
+                <p>Basketbalový turnaj pro studenty Vyšší odborné školy a Střední školy Kutná Hora.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Rychlé odkazy</h4>
+                <a href="informace.html">Informace &amp; pravidla</a>
+                <a href="misto.html">Místo konání</a>
+                <a href="odmeny.html">Odměny</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#registrace">Registrace</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <p>VOŠKH Kutná Hora</p>
+                <p>Hala Klimeška</p>
+                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Basketbalový Turnaj VOŠKH &mdash; Kutná Hora
+        </div>
     </footer>
 
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            const isOpen = hamburger.classList.toggle('open');
+            navLinks.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            hamburger.setAttribute('aria-label', isOpen ? 'Zavřít menu' : 'Otevřít menu');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 150);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>

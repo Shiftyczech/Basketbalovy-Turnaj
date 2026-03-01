@@ -340,6 +340,72 @@
         #toast.show { transform: translateY(0); opacity: 1; }
         #toast.error { border-left-color: #e53935; }
 
+        /* --- SOCIÁLNÍ SDÍLENÍ --- */
+        .share-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .share-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 24px; border-radius: 50px; font-weight: bold;
+            font-size: 0.9rem; text-decoration: none; transition: all 0.3s;
+            border: none; cursor: pointer;
+        }
+        .share-btn.fb { background: #1877f2; color: #fff; }
+        .share-btn.fb:hover { background: #1558b0; transform: translateY(-3px); }
+        .share-btn.wa { background: #25d366; color: #fff; }
+        .share-btn.wa:hover { background: #1aab53; transform: translateY(-3px); }
+        .share-btn.tw { background: #000; color: #fff; }
+        .share-btn.tw:hover { background: #333; transform: translateY(-3px); }
+        .share-btn.tg { background: #229ed9; color: #fff; }
+        .share-btn.tg:hover { background: #1a85b8; transform: translateY(-3px); }
+        .share-btn.ig { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4); color: #fff; }
+        .share-btn.ig:hover { opacity: 0.85; transform: translateY(-3px); }
+        .share-btn.li { background: #0a66c2; color: #fff; }
+        .share-btn.li:hover { background: #084e96; transform: translateY(-3px); }
+        .share-btn.em { background: #555; color: #fff; }
+        .share-btn.em:hover { background: #444; transform: translateY(-3px); }
+        .share-btn.copy { background: var(--card-bg); color: #fff; border: 1px solid #333; }
+        .share-btn.copy:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-3px); }
+        .share-btn.native { background: var(--orange); color: #fff; }
+        .share-btn.native:hover { background: var(--orange-hover); transform: translateY(-3px); }
+        .share-btn.qr { background: var(--card-bg); color: #fff; border: 1px solid #333; }
+        .share-btn.qr:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-3px); }
+
+        /* --- QR MODAL --- */
+        #qr-modal {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85); z-index: 9997;
+            align-items: center; justify-content: center;
+            animation: fadeInQr 0.3s ease;
+        }
+        #qr-modal.open { display: flex; }
+        @keyframes fadeInQr { from { opacity: 0; } to { opacity: 1; } }
+        .qr-box {
+            background: var(--card-bg); border-radius: 20px;
+            padding: 40px; text-align: center;
+            border: 2px solid var(--orange); max-width: 320px; width: 90%;
+        }
+        .qr-box h3 { font-family: 'Bebas Neue'; font-size: 2rem; margin-bottom: 6px; color: var(--orange); }
+        .qr-box p { color: #888; font-size: 0.85rem; margin-bottom: 20px; }
+        .qr-box img { width: 200px; height: 200px; border-radius: 10px; background: #fff; padding: 8px; }
+        .qr-close { margin-top: 20px; background: none; border: 1px solid #333; color: #888; padding: 8px 24px; border-radius: 50px; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .qr-close:hover { border-color: var(--orange); color: var(--orange); }
+
+        /* --- GDPR BANNER --- */
+        #gdpr-banner {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #111; border-top: 2px solid var(--orange);
+            padding: 20px 5%; display: flex; align-items: center;
+            justify-content: space-between; gap: 20px; flex-wrap: wrap;
+            z-index: 9998; box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #gdpr-banner.show { transform: translateY(0); }
+        #gdpr-banner p { color: #aaa; font-size: 0.9rem; flex: 1; min-width: 200px; margin: 0; }
+        .gdpr-btns { display: flex; gap: 10px; align-items: center; }
+        .gdpr-accept { background: var(--orange); color: #fff; border: none; padding: 10px 24px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .gdpr-accept:hover { background: var(--orange-hover); }
+        .gdpr-reject { background: transparent; color: #666; border: 1px solid #333; padding: 10px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .gdpr-reject:hover { color: #fff; border-color: #666; }
+
         /* --- SCROLL ANIMACE --- */
         .reveal {
             opacity: 0;
@@ -384,10 +450,13 @@
                 <span></span><span></span><span></span>
             </button>
             <ul class="nav-links" id="nav-links">
-                <li><a href="#countdown-section">Start</a></li>
+                <li><a href="#countdown-section" class="active">Start</a></li>
                 <li><a href="informace.html">Informace</a></li>
                 <li><a href="misto.html">Místo</a></li>
                 <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="rozpis.html">Rozpis</a></li>
+                <li><a href="galerie.html">Galerie</a></li>
+                <li><a href="faq.html">FAQ</a></li>
                 <li><a href="#registrace">Registrace</a></li>
             </ul>
         </div>
@@ -494,6 +563,20 @@
                 <p>Basketbalový turnaj pro studenty Vyšší odborné školy a Střední školy Kutná Hora.</p>
             </div>
             <div class="footer-col">
+                <h4>Sdílet turnaj</h4>
+                <p style="color:#666; font-size:0.85rem; margin-bottom:10px;">Rekřeť kamarádům!</p>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#1877f2; font-size:0.9rem; margin-bottom:6px;" onclick="shareFB()"><i class="fab fa-facebook"></i> Facebook</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#25d366; font-size:0.9rem; margin-bottom:6px;" onclick="shareWA()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#1d9bf0; font-size:0.9rem; margin-bottom:6px;" onclick="shareTW()"><i class="fab fa-x-twitter"></i> X / Twitter</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#229ed9; font-size:0.9rem; margin-bottom:6px;" onclick="shareTG()"><i class="fab fa-telegram"></i> Telegram</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#dd2a7b; font-size:0.9rem; margin-bottom:6px;" onclick="shareIG()"><i class="fab fa-instagram"></i> Instagram</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#0a66c2; font-size:0.9rem; margin-bottom:6px;" onclick="shareLI()"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#aaa; font-size:0.9rem; margin-bottom:6px;" onclick="shareEmail()"><i class="fas fa-envelope"></i> Email</a>
+                <a style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#aaa; font-size:0.9rem; margin-bottom:6px;" onclick="showQR()"><i class="fas fa-qrcode"></i> QR kód</a>
+                <a id="copy-link-btn" style="cursor:pointer; display:inline-flex; align-items:center; gap:6px; color:#888; font-size:0.9rem; margin-bottom:6px;" onclick="copyLink()"><i class="fas fa-link"></i> Kopírovat odkaz</a>
+                <a id="native-share-btn" style="display:none; cursor:pointer; align-items:center; gap:6px; color:var(--orange); font-size:0.9rem;" onclick="shareNative()"><i class="fas fa-share-nodes"></i> Sdílet (telefon)</a>
+            </div>
+            <div class="footer-col">
                 <h4>Rychlé odkazy</h4>
                 <a href="informace.html">Informace & pravidla</a>
                 <a href="misto.html">Místo konání</a>
@@ -513,6 +596,26 @@
     </footer>
 
     <div id="toast"></div>
+
+    <!-- QR KÓD MODAL -->
+    <div id="qr-modal">
+        <div class="qr-box">
+            <h3>QR KÓD</h3>
+            <p>Naskenuj a sdílej turnaj</p>
+            <img id="qr-img" src="" alt="QR kód turnaje">
+            <br>
+            <button class="qr-close" onclick="document.getElementById('qr-modal').classList.remove('open'); document.body.style.overflow='';">Zavřít</button>
+        </div>
+    </div>
+
+    <!-- GDPR BANNER -->
+    <div id="gdpr-banner">
+        <p>🍪 Tato stránka používá Google Sheets pro uložení registrací týmů. Žádné reklamní cookies nepoužíváme.</p>
+        <div class="gdpr-btns">
+            <button class="gdpr-reject" id="gdpr-reject">Odmítnout</button>
+            <button class="gdpr-accept" id="gdpr-accept">Rozumím ✔</button>
+        </div>
+    </div>
 
     <script>
         const targetDate = new Date("June 15, 2026 09:00:00").getTime();
@@ -688,6 +791,71 @@
             row.classList.toggle('show');
             btn.textContent = row.classList.contains('show') ? 'Skrýt' : 'Zobrazit';
         }
+
+        // ===== SOCI\u00c1LN\u00cd SD\u00cdLEN\u00cd =====
+        const shareUrl = encodeURIComponent(window.location.href);
+        const shareText = encodeURIComponent('Basketbalov\u00fd turnaj VOŠKH CUP 2026 – 15. \u010dervna, Hala Klime\u0161ka, Kutn\u00e1 Hora!');
+        function shareFB() { window.open('https://www.facebook.com/sharer/sharer.php?u=' + shareUrl, '_blank', 'width=600,height=400'); }
+        function shareWA() { window.open('https://api.whatsapp.com/send?text=' + shareText + '%20' + shareUrl, '_blank'); }
+        function shareTW() { window.open('https://twitter.com/intent/tweet?text=' + shareText + '&url=' + shareUrl, '_blank', 'width=600,height=400'); }
+        function shareTG() { window.open('https://t.me/share/url?url=' + shareUrl + '&text=' + shareText, '_blank'); }
+        function shareIG() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showToast('\ud83d\udcf8 Odkaz zkopírován! Vloz ho do profilu nebo příběhu na Instagramu.');
+                window.open('https://www.instagram.com/', '_blank');
+            }).catch(() => {
+                showToast('\ud83d\udcf8 Otevři Instagram a sdílej odkaz ručně.', true);
+                window.open('https://www.instagram.com/', '_blank');
+            });
+        }
+        function shareLI() { window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrl, '_blank', 'width=600,height=500'); }
+        function shareEmail() {
+            const subject = encodeURIComponent('VOŠKH CUP 2026 – Basketbalový turnaj');
+            const body = encodeURIComponent('Ahoj! Podívej se na basketbalový turnaj VOŠKH CUP 2026.\n\n15. června 2026 | Hala Klimeška, Kutná Hora\n\n' + window.location.href);
+            window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+        }
+        function showQR() {
+            const url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(window.location.href) + '&bgcolor=ffffff&margin=5';
+            document.getElementById('qr-img').src = url;
+            document.getElementById('qr-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        document.getElementById('qr-modal').addEventListener('click', function(e) {
+            if (e.target === this) { this.classList.remove('open'); document.body.style.overflow = ''; }
+        });
+        function shareNative() {
+            if (navigator.share) {
+                navigator.share({ title: 'VOŠKH CUP 2026', text: 'Basketbalový turnaj – 15. června 2026, Hala Klimeška, Kutná Hora!', url: window.location.href });
+            }
+        }
+        // Zobraz tlačítko nativního sdílení pouze na mobilních zařízeních
+        window.addEventListener('DOMContentLoaded', function() {
+            if (navigator.share) {
+                const nativeBtn = document.getElementById('native-share-btn');
+                if (nativeBtn) nativeBtn.style.display = 'inline-flex';
+            }
+        });
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                showToast('\u2713 Odkaz zkopírován!');
+                const btn = document.getElementById('copy-link-btn');
+                if (btn) { btn.style.color = 'var(--orange)'; setTimeout(() => btn.style.color = '#888', 2000); }
+            });
+        }
+
+        // ===== GDPR BANNER =====
+        (function() {
+            if (!localStorage.getItem('gdpr-accepted')) {
+                setTimeout(() => document.getElementById('gdpr-banner').classList.add('show'), 1000);
+            }
+            document.getElementById('gdpr-accept').addEventListener('click', () => {
+                localStorage.setItem('gdpr-accepted', '1');
+                document.getElementById('gdpr-banner').classList.remove('show');
+            });
+            document.getElementById('gdpr-reject').addEventListener('click', () => {
+                document.getElementById('gdpr-banner').classList.remove('show');
+            });
+        })();
 
         // ===== INICIALIZACE =====
         window.addEventListener('DOMContentLoaded', function () {

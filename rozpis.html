@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozpis zápasů | VOŠKH CUP 2026</title>
+    <meta name="description" content="Rozpis a výsledky zápasů basketbalového turnaje VOŠKH CUP 2026.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root {
+            --orange: #FF5722;
+            --orange-hover: #e64a19;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --nav-bg: rgba(13, 13, 13, 0.98);
+            --green: #4caf50;
+            --red: #e53935;
+            --blue: #2196f3;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        html { scroll-padding-top: 80px; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #fff; background-color: var(--dark-bg); overflow-x: hidden; }
+
+        /* --- NAVIGACE --- */
+        nav { position: fixed; top: 0; width: 100%; background: var(--nav-bg); z-index: 1000; border-bottom: 2px solid var(--orange); backdrop-filter: blur(10px); }
+        .nav-container { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; }
+        .nav-logo { font-family: 'Bebas Neue'; font-size: 2.2rem; text-decoration: none; color: #fff; letter-spacing: 2px; }
+        .nav-logo span { color: var(--orange); }
+        .nav-links { display: flex; list-style: none; gap: 35px; }
+        .nav-links a { text-decoration: none; color: #fff; font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 5px; }
+        .hamburger span { display: block; width: 26px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s ease; }
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* --- HERO --- */
+        .schedule-hero {
+            padding: 140px 0 50px;
+            text-align: center;
+            background: linear-gradient(to bottom, #1a1a1a, var(--dark-bg));
+        }
+        .schedule-hero h1 { font-family: 'Bebas Neue'; font-size: clamp(4rem, 12vw, 7rem); color: var(--orange); line-height: 1; }
+        .schedule-hero p { color: #888; letter-spacing: 3px; font-size: 1rem; margin-top: 10px; }
+
+        /* --- INFO BANNER --- */
+        .info-banner {
+            max-width: 860px;
+            margin: 0 auto 50px;
+            padding: 0 5%;
+        }
+        .notice-box {
+            background: rgba(255, 87, 34, 0.08);
+            border: 1px dashed var(--orange);
+            border-radius: 12px;
+            padding: 20px 28px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .notice-box i { color: var(--orange); font-size: 1.2rem; margin-top: 3px; flex-shrink: 0; }
+        .notice-box p { color: #ccc; font-size: 0.95rem; }
+        .notice-box strong { color: #fff; }
+
+        /* --- SEKCE --- */
+        .section { padding: 0 5% 70px; max-width: 1200px; margin: 0 auto; }
+        .section-title {
+            font-family: 'Bebas Neue';
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .section-title span { color: var(--orange); }
+        .section-title .badge {
+            background: var(--orange);
+            color: #000;
+            font-size: 1rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+        }
+
+        /* --- LEGENDA --- */
+        .legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+        .legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; color: #888; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot.upcoming { background: #555; }
+        .dot.live { background: var(--orange); }
+        .dot.done { background: var(--green); }
+
+        /* --- SKUPINOVÉ TABULKY --- */
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .group-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+        .group-header {
+            background: var(--orange);
+            padding: 14px 24px;
+            font-family: 'Bebas Neue';
+            font-size: 1.6rem;
+            color: #000;
+            letter-spacing: 1px;
+        }
+        .group-table { width: 100%; border-collapse: collapse; }
+        .group-table th {
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #666;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .group-table th:not(:first-child) { text-align: center; }
+        .group-table td { padding: 12px 16px; border-bottom: 1px solid #222; font-size: 0.95rem; }
+        .group-table td:not(:first-child) { text-align: center; color: #aaa; }
+        .group-table tbody tr:last-child td { border-bottom: none; }
+        .group-table tbody tr:hover { background: rgba(255,87,34,0.03); }
+        .team-name { font-weight: 700; }
+        .team-rank { display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #2a2a2a; font-size: 0.75rem; text-align: center; line-height: 22px; margin-right: 8px; color: #888; }
+        .team-rank.q { background: var(--orange); color: #000; }
+        .tbd { color: #444; font-style: italic; font-size: 0.85rem; }
+
+        /* --- ZÁPASY --- */
+        .matches-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .match-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 18px 24px;
+            display: grid;
+            grid-template-columns: 80px 1fr auto 1fr 80px;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #222;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .match-card:hover { border-color: #333; transform: translateX(4px); }
+        .match-card.live { border-left: 3px solid var(--orange); background: rgba(255,87,34,0.04); }
+        .match-card.done { border-left: 3px solid var(--green); }
+
+        .match-time { font-family: 'Bebas Neue'; font-size: 1.3rem; color: #888; text-align: center; }
+        .match-time small { display: block; font-family: 'Inter'; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #555; }
+
+        .team-side { display: flex; align-items: center; gap: 10px; }
+        .team-side.right { justify-content: flex-end; flex-direction: row-reverse; }
+
+        .team-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: #2a2a2a;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; flex-shrink: 0;
+        }
+        .team-side-name { font-weight: 700; font-size: 0.95rem; }
+        .team-side.right .team-side-name { text-align: right; }
+
+        .score-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .score {
+            font-family: 'Bebas Neue';
+            font-size: 2rem;
+            color: #fff;
+            min-width: 36px;
+            text-align: center;
+        }
+        .score.winner { color: var(--orange); }
+        .vs { font-family: 'Bebas Neue'; font-size: 1.2rem; color: #444; }
+
+        .match-status {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+        .status-upcoming { background: #222; color: #666; }
+        .status-live { background: var(--orange); color: #000; animation: pulse 1.5s infinite; }
+        .status-done { background: rgba(76,175,80,0.15); color: var(--green); }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* --- PLAY-OFF BRACKET --- */
+        .bracket-container { overflow-x: auto; padding-bottom: 20px; }
+        .bracket {
+            display: flex;
+            gap: 40px;
+            min-width: 700px;
+            padding: 20px 0;
+        }
+        .bracket-round { display: flex; flex-direction: column; justify-content: space-around; flex: 1; }
+        .bracket-round-title {
+            font-family: 'Bebas Neue';
+            font-size: 1.2rem;
+            color: #555;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .bracket-match {
+            background: var(--card-bg);
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 8px 0;
+            transition: border-color 0.3s;
+        }
+        .bracket-match:hover { border-color: var(--orange); }
+        .bracket-team {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        .bracket-team:first-child { border-bottom: 1px solid #2a2a2a; }
+        .bracket-team.winner { background: rgba(255,87,34,0.08); }
+        .bracket-team.winner .bt-name { color: var(--orange); font-weight: 700; }
+        .bt-name { font-weight: 600; color: #ccc; }
+        .bt-score { font-family: 'Bebas Neue'; font-size: 1.3rem; color: #555; }
+        .bracket-team.winner .bt-score { color: var(--orange); }
+        .bracket-tbd { text-align: center; color: #333; font-style: italic; font-size: 0.8rem; padding: 8px; }
+
+        /* --- REVEAL --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- FOOTER --- */
+        footer { padding: 60px 20px; background: #080808; border-top: 2px solid #1e1e1e; }
+        .footer-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--orange); font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-col p, .footer-col a { color: #666; font-size: 0.9rem; line-height: 1.9; text-decoration: none; display: block; }
+        .footer-col a:hover { color: var(--orange); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #1a1a1a; color: #333; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-container { padding: 15px 5%; }
+            .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid #222; padding: 10px 0; }
+            .nav-links.open { display: flex; }
+            .nav-links li a { display: block; padding: 14px 5%; border-bottom: 1px solid #1a1a1a; }
+            .match-card { grid-template-columns: 1fr; text-align: center; }
+            .team-side.right { flex-direction: row; justify-content: center; }
+            .score-box { justify-content: center; }
+            .groups-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
+            <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Start</a></li>
+                <li><a href="informace.html">Informace</a></li>
+                <li><a href="misto.html">Místo</a></li>
+                <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="rozpis.html" class="active">Rozpis</a></li>
+                <li><a href="galerie.html">Galerie</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="index.html#registrace">Registrace</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="schedule-hero">
+        <h1>Rozpis zápasů</h1>
+        <p>15. ČERVNA 2026 &nbsp;|&nbsp; HALA KLIMEŠKA</p>
+    </header>
+
+    <!-- NOTICE -->
+    <div class="info-banner reveal">
+        <div class="notice-box">
+            <i class="fas fa-info-circle"></i>
+            <p>
+                <strong>Skupiny a rozpis jsou prozatím předběžné.</strong>
+                Finální los skupin proběhne při zahájení turnaje <strong>15. 6. 2026 v 9:00</strong>.
+                Níže vidíš ukázku formátu a harmonogramu. Výsledky budou aktualizovány v průběhu dne.
+            </p>
+        </div>
+    </div>
+
+    <!-- SKUPINY -->
+    <div class="section reveal">
+        <h2 class="section-title"><span>Skupinová fáze</span> <span class="badge">9:30 – 13:00</span></h2>
+
+        <div class="legend">
+            <div class="legend-item"><div class="dot upcoming"></div> Naplánováno</div>
+            <div class="legend-item"><div class="dot live"></div> Probíhá</div>
+            <div class="legend-item"><div class="dot done"></div> Dokončeno</div>
+        </div>
+
+        <div class="groups-grid">
+            <!-- SKUPINA A -->
+            <div class="group-card">
+                <div class="group-header">Skupina A</div>
+                <table class="group-table">
+                    <thead>
+                        <tr>
+                            <th>Tým</th>
+                            <th>Z</th>
+                            <th>V</th>
+                            <th>P</th>
+                            <th>Skóre</th>
+                            <th>Body</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="team-rank q">1</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="team-rank q">2</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="team-rank">3</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="team-rank">4</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- SKUPINA B -->
+            <div class="group-card">
+                <div class="group-header">Skupina B</div>
+                <table class="group-table">
+                    <thead>
+                        <tr>
+                            <th>Tým</th>
+                            <th>Z</th>
+                            <th>V</th>
+                            <th>P</th>
+                            <th>Skóre</th>
+                            <th>Body</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="team-rank q">1</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="team-rank q">2</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="team-rank">3</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="team-rank">4</span><span class="team-name">TBD</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                            <td><span class="tbd">–</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ZÁPASY SKUPIN -->
+        <h3 style="font-family:'Bebas Neue'; font-size:1.8rem; color:#555; letter-spacing:2px; margin-bottom:20px;">HARMONOGRAM UTKÁNÍ</h3>
+        <div class="matches-list">
+
+            <div class="match-card">
+                <div class="match-time">9:30<small>Hřiště 1</small></div>
+                <div class="team-side">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina A – Tým 1</span>
+                </div>
+                <div class="score-box">
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                    <span class="vs">VS</span>
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                </div>
+                <div class="team-side right">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina A – Tým 2</span>
+                </div>
+                <div style="text-align:center;"><span class="match-status status-upcoming">Plánováno</span></div>
+            </div>
+
+            <div class="match-card">
+                <div class="match-time">9:30<small>Hřiště 2</small></div>
+                <div class="team-side">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina B – Tým 1</span>
+                </div>
+                <div class="score-box">
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                    <span class="vs">VS</span>
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                </div>
+                <div class="team-side right">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina B – Tým 2</span>
+                </div>
+                <div style="text-align:center;"><span class="match-status status-upcoming">Plánováno</span></div>
+            </div>
+
+            <div class="match-card">
+                <div class="match-time">10:00<small>Hřiště 1</small></div>
+                <div class="team-side">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina A – Tým 3</span>
+                </div>
+                <div class="score-box">
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                    <span class="vs">VS</span>
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                </div>
+                <div class="team-side right">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina A – Tým 4</span>
+                </div>
+                <div style="text-align:center;"><span class="match-status status-upcoming">Plánováno</span></div>
+            </div>
+
+            <div class="match-card">
+                <div class="match-time">10:00<small>Hřiště 2</small></div>
+                <div class="team-side">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina B – Tým 3</span>
+                </div>
+                <div class="score-box">
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                    <span class="vs">VS</span>
+                    <span class="score tbd" style="font-size:1.4rem;">—</span>
+                </div>
+                <div class="team-side right">
+                    <div class="team-avatar">🏀</div>
+                    <span class="team-side-name tbd">Skupina B – Tým 4</span>
+                </div>
+                <div style="text-align:center;"><span class="match-status status-upcoming">Plánováno</span></div>
+            </div>
+
+            <div class="match-card" style="opacity:0.5; background: repeating-linear-gradient(45deg, var(--card-bg), var(--card-bg) 10px, #161616 10px, #161616 20px);">
+                <div class="match-time">10:30 – 13:00<small>Další kola</small></div>
+                <div style="grid-column: 2 / 6; text-align:center; color:#444; font-style:italic; font-size:0.9rem;">
+                    Zbývající zápasy skupinové fáze – budou doplněny po losu skupin
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- PLAY-OFF -->
+    <div class="section reveal">
+        <h2 class="section-title"><span>Play-off</span> <span class="badge">13:30 – 15:30</span></h2>
+
+        <div class="bracket-container">
+            <div class="bracket">
+
+                <!-- SEMIFINÁLE -->
+                <div class="bracket-round">
+                    <div class="bracket-round-title">Semifinále</div>
+
+                    <div class="bracket-match">
+                        <div class="bracket-team">
+                            <span class="bt-name">1. místo Skupiny A</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-team">
+                            <span class="bt-name">2. místo Skupiny B</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-tbd">13:30 | Hřiště 1</div>
+                    </div>
+
+                    <div class="bracket-match">
+                        <div class="bracket-team">
+                            <span class="bt-name">1. místo Skupiny B</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-team">
+                            <span class="bt-name">2. místo Skupiny A</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-tbd">13:30 | Hřiště 2</div>
+                    </div>
+                </div>
+
+                <!-- O 3. MÍSTO + FINÁLE -->
+                <div class="bracket-round">
+                    <div class="bracket-round-title">O 3. místo</div>
+
+                    <div class="bracket-match" style="margin-top: 80px;">
+                        <div class="bracket-team">
+                            <span class="bt-name">Poražený SF1</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-team">
+                            <span class="bt-name">Poražený SF2</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-tbd">14:30 | Hřiště 2</div>
+                    </div>
+                </div>
+
+                <!-- FINÁLE -->
+                <div class="bracket-round">
+                    <div class="bracket-round-title">🏆 Finále</div>
+
+                    <div class="bracket-match" style="margin-top: 80px; border-color: rgba(255,87,34,0.4);">
+                        <div class="bracket-team">
+                            <span class="bt-name">Vítěz SF1</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-team">
+                            <span class="bt-name">Vítěz SF2</span>
+                            <span class="bt-score">–</span>
+                        </div>
+                        <div class="bracket-tbd" style="color:var(--orange);">15:00 | Hřiště 1</div>
+                    </div>
+                </div>
+
+                <!-- VÝSLEDKY -->
+                <div class="bracket-round">
+                    <div class="bracket-round-title">🥇 Výsledky</div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px; margin-top: 60px;">
+                        <div class="bracket-match" style="border-color: #FFD700;">
+                            <div class="bracket-team" style="background: rgba(255,215,0,0.05);">
+                                <span class="bt-name" style="color: #FFD700;">🥇 1. místo</span>
+                                <span class="bt-score tbd">TBD</span>
+                            </div>
+                        </div>
+                        <div class="bracket-match" style="border-color: #C0C0C0;">
+                            <div class="bracket-team">
+                                <span class="bt-name" style="color: #C0C0C0;">🥈 2. místo</span>
+                                <span class="bt-score tbd">TBD</span>
+                            </div>
+                        </div>
+                        <div class="bracket-match" style="border-color: #CD7F32;">
+                            <div class="bracket-team">
+                                <span class="bt-name" style="color: #CD7F32;">🥉 3. místo</span>
+                                <span class="bt-score tbd">TBD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- VYHLÁŠENÍ -->
+    <div class="section reveal">
+        <div style="background: var(--card-bg); border-radius: 16px; padding: 40px; text-align: center; border: 1px solid #222; border-top: 4px solid var(--orange);">
+            <div style="font-size: 3rem; margin-bottom: 15px;">🏆</div>
+            <h2 style="font-family:'Bebas Neue'; font-size:2.5rem; margin-bottom:10px;">Vyhlášení vítězů</h2>
+            <p style="color:#888; font-size:1.1rem; margin-bottom:20px;">Slavnostní předání pohárů, medailí a cen proběhne v <strong style="color:#fff;">16:00</strong> na hlavním hřišti.</p>
+            <a href="odmeny.html" style="display:inline-flex; align-items:center; gap:8px; background:var(--orange); color:#fff; padding:14px 32px; border-radius:50px; text-decoration:none; font-weight:bold; transition:0.3s;">
+                <i class="fas fa-trophy"></i> Přehled cen
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>VOŠKH CUP</h4>
+                <p>Basketbalový turnaj pro studenty Vyšší odborné školy a Střední školy Kutná Hora.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Rychlé odkazy</h4>
+                <a href="informace.html">Informace &amp; pravidla</a>
+                <a href="misto.html">Místo konání</a>
+                <a href="odmeny.html">Odměny</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#registrace">Registrace</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <p>VOŠKH Kutná Hora</p>
+                <p>Hala Klimeška</p>
+                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Basketbalový Turnaj VOŠKH &mdash; Kutná Hora
+        </div>
+    </footer>
+
+    <script>
+        // HAMBURGER
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            const isOpen = hamburger.classList.toggle('open');
+            navLinks.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            hamburger.setAttribute('aria-label', isOpen ? 'Zavřít menu' : 'Otevřít menu');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // SCROLL ANIMACE
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 100);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

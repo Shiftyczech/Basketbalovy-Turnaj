@@ -60,9 +60,37 @@
         iframe { width: 100%; height: 100%; border: 0; }
 
         .btn-back { display: inline-block; margin-bottom: 40px; color: var(--orange); text-decoration: none; font-weight: bold; text-transform: uppercase; }
-        footer { padding: 50px; text-align: center; color: #444; border-top: 1px solid #222; }
+        
+        /* --- HAMBURGER MENU --- */
+        .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 5px; }
+        .hamburger span { display: block; width: 26px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s ease; }
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .nav-links a.active { color: var(--orange); }
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
 
-        @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+        /* --- FOOTER --- */
+        footer { padding: 60px 20px; background: #080808; border-top: 2px solid #1e1e1e; }
+        .footer-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--orange); font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-col p, .footer-col a { color: #666; font-size: 0.9rem; line-height: 1.9; text-decoration: none; display: block; }
+        .footer-col a:hover { color: var(--orange); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #1a1a1a; color: #333; font-size: 0.85rem; }
+
+        /* --- NAVIGACE PRO STRANY --- */
+        .nav-btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 30px; background: var(--orange); color: #fff; text-decoration: none; border-radius: 50px; font-weight: bold; font-size: 0.95rem; transition: all 0.3s; }
+        .nav-btn:hover { background: #e64a19; transform: translateY(-3px); }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-container { padding: 15px 5%; }
+            .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid #222; padding: 10px 0; }
+            .nav-links.open { display: flex; }
+            .nav-links li a { display: block; padding: 14px 5%; border-bottom: 1px solid #1a1a1a; }
+            .grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -70,11 +98,17 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html">Start</a></li>
                 <li><a href="informace.html">Informace</a></li>
-                <li><a href="misto.html">Místo</a></li>
+                <li><a href="misto.html" class="active">Místo</a></li>
                 <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="rozpis.html">Rozpis</a></li>
+                <li><a href="galerie.html">Galerie</a></li>
+                <li><a href="faq.html">FAQ</a></li>
                 <li><a href="index.html#registrace">Registrace</a></li>
             </ul>
         </div>
@@ -87,11 +121,11 @@
         </section>
 
         <div class="grid">
-            <div class="info-box">
+            <div class="info-box reveal">
                 <h2>O hale</h2>
                 <p>Špičkové sportoviště s profesionální palubovkou. Moderní zázemí pro všechny účastníky turnaje.</p>
             </div>
-            <div class="info-box">
+            <div class="info-box reveal">
                 <h2>Adresa</h2>
                 <p>Čáslavská 1982, 284 01 Kutná Hora</p>
                 <p style="color: var(--orange);">Nezapomeňte sálovou obuv!</p>
@@ -102,7 +136,7 @@
         
         <div class="map-container">
             <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2567.318464670051!2d15.27361107693635!3d49.94670067149953!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470c3f59e6d0910b%3A0xc3191196144e5d26!2zU3BvcnRvdm7DrSBoYWxhIEtsaW1lxaZrYQ!5e0!3m2!1scs!2scz!4v1700000000000!5m2!1scs!2scz" 
+                src="https://maps.google.com/maps?q=Sportovní+hala+Klimeška,+Čáslavská+1982,+284+01+Kutná+Hora&output=embed&hl=cs&z=17" 
                 allowfullscreen="" 
                 loading="lazy" 
                 referrerpolicy="no-referrer-when-downgrade">
@@ -110,13 +144,60 @@
         </div>
 
         <div style="text-align: center;">
-            <a href="index.html" class="btn-back">Zpět na hlavní stránku</a>
+            <a href="index.html" class="nav-btn">← Zpět na hlavní stránku</a>
         </div>
     </main>
 
     <footer>
-        <p>© 2026 Basketbalový Turnaj VOŠKH | Kutná Hora</p>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>VOŠKH CUP</h4>
+                <p>Basketbalový turnaj pro studenty Vyšší odborné školy a Střední školy Kutná Hora.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Rychlé odkazy</h4>
+                <a href="informace.html">Informace &amp; pravidla</a>
+                <a href="misto.html">Místo konání</a>
+                <a href="odmeny.html">Odměny</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#registrace">Registrace</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <p>VOŠKH Kutná Hora</p>
+                <p>Hala Klimeška</p>
+                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Basketbalový Turnaj VOŠKH &mdash; Kutná Hora
+        </div>
     </footer>
 
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            const isOpen = hamburger.classList.toggle('open');
+            navLinks.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            hamburger.setAttribute('aria-label', isOpen ? 'Zavřít menu' : 'Otevřít menu');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        });
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 120);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>

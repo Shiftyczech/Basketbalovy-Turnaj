@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galerie | VOŠKH CUP 2026</title>
+    <meta name="description" content="Fotogalerie z basketbalového turnaje VOŠKH CUP – hala, atmosféra, hráči.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        :root {
+            --orange: #FF5722;
+            --orange-hover: #e64a19;
+            --dark-bg: #0d0d0d;
+            --card-bg: #1a1a1a;
+            --nav-bg: rgba(13, 13, 13, 0.98);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        html { scroll-padding-top: 80px; }
+        body { font-family: 'Inter', sans-serif; line-height: 1.6; color: #fff; background-color: var(--dark-bg); overflow-x: hidden; }
+
+        /* --- NAVIGACE --- */
+        nav { position: fixed; top: 0; width: 100%; background: var(--nav-bg); z-index: 1000; border-bottom: 2px solid var(--orange); backdrop-filter: blur(10px); }
+        .nav-container { max-width: 1300px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; }
+        .nav-logo { font-family: 'Bebas Neue'; font-size: 2.2rem; text-decoration: none; color: #fff; letter-spacing: 2px; }
+        .nav-logo span { color: var(--orange); }
+        .nav-links { display: flex; list-style: none; gap: 35px; }
+        .nav-links a { text-decoration: none; color: #fff; font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; transition: color 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 5px; }
+        .hamburger span { display: block; width: 26px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s ease; }
+        .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        /* --- HERO --- */
+        .gallery-hero {
+            padding: 140px 0 50px;
+            text-align: center;
+            background: linear-gradient(to bottom, #1a1a1a, var(--dark-bg));
+        }
+        .gallery-hero h1 { font-family: 'Bebas Neue'; font-size: clamp(4rem, 12vw, 7rem); color: var(--orange); line-height: 1; }
+        .gallery-hero p { color: #888; letter-spacing: 3px; font-size: 1rem; margin-top: 10px; }
+
+        /* --- FILTER TAGY --- */
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px 5% 40px;
+        }
+        .filter-btn {
+            padding: 8px 22px;
+            border-radius: 50px;
+            border: 1px solid #333;
+            background: transparent;
+            color: #888;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .filter-btn:hover, .filter-btn.active { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+        /* --- GALERIE GRID --- */
+        .gallery-grid {
+            columns: 3;
+            column-gap: 12px;
+            padding: 0 5% 80px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            background: var(--card-bg);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img { transform: scale(1.06); }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+        .gallery-caption {
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .gallery-caption span { color: var(--orange); font-size: 0.8rem; display: block; }
+
+        .zoom-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--orange);
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: scale(0.7);
+            transition: all 0.3s;
+        }
+        .gallery-item:hover .zoom-icon { opacity: 1; transform: scale(1); }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+        #lightbox.open { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 1000px;
+            max-height: 90vh;
+            width: 100%;
+        }
+
+        #lightbox-img {
+            width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .lightbox-info {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .lightbox-info h3 { font-family: 'Bebas Neue'; font-size: 1.8rem; color: #fff; }
+        .lightbox-info p { color: #888; font-size: 0.9rem; }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+        .lightbox-close:hover { color: var(--orange); }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        .lightbox-nav:hover { background: var(--orange); }
+        .lightbox-prev { left: -70px; }
+        .lightbox-next { right: -70px; }
+
+        /* --- REVEAL --- */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.5s ease, transform 0.5s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- FOOTER --- */
+        footer { padding: 60px 20px; background: #080808; border-top: 2px solid #1e1e1e; }
+        .footer-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .footer-col h4 { color: var(--orange); font-family: 'Bebas Neue'; font-size: 1.4rem; letter-spacing: 1px; margin-bottom: 12px; }
+        .footer-col p, .footer-col a { color: #666; font-size: 0.9rem; line-height: 1.9; text-decoration: none; display: block; }
+        .footer-col a:hover { color: var(--orange); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #1a1a1a; color: #333; font-size: 0.85rem; }
+
+        @media (max-width: 900px) {
+            .gallery-grid { columns: 2; }
+            .lightbox-prev { left: -10px; }
+            .lightbox-next { right: -10px; }
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-container { padding: 15px 5%; }
+            .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; width: 100%; background: var(--nav-bg); border-top: 1px solid #222; padding: 10px 0; }
+            .nav-links.open { display: flex; }
+            .nav-links li a { display: block; padding: 14px 5%; border-bottom: 1px solid #1a1a1a; }
+            .gallery-grid { columns: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">VOŠKH<span>CUP</span></a>
+            <button class="hamburger" id="hamburger" aria-label="Otevřít menu" aria-expanded="false" aria-controls="nav-links">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Start</a></li>
+                <li><a href="informace.html">Informace</a></li>
+                <li><a href="misto.html">Místo</a></li>
+                <li><a href="odmeny.html">Odměny</a></li>
+                <li><a href="rozpis.html">Rozpis</a></li>
+                <li><a href="galerie.html" class="active">Galerie</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="index.html#registrace">Registrace</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="gallery-hero">
+        <h1>Galerie</h1>
+        <p>FOTKY Z HALY A PŘEDCHOZÍCH ROČNÍKŮ</p>
+    </header>
+
+    <!-- FILTER -->
+    <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">Vše</button>
+        <button class="filter-btn" data-filter="hala">Hala</button>
+        <button class="filter-btn" data-filter="zapas">Zápasy</button>
+        <button class="filter-btn" data-filter="vitezove">Vítězové</button>
+        <button class="filter-btn" data-filter="atmosfera">Atmosféra</button>
+    </div>
+
+    <!-- GALLERY GRID -->
+    <div class="gallery-grid" id="gallery-grid">
+
+        <div class="gallery-item reveal" data-category="zapas" data-title="Duel o míč" data-desc="Vzrušující souboj v základní skupině">
+            <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=700&q=80" alt="Basketbalový zápas" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Duel o míč <span>Zápasy</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="hala" data-title="Hala Klimeška" data-desc="Profesionální palubovka — srdce turnaje">
+            <img src="https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=700&q=80" alt="Hala Klimeška" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Hala Klimeška <span>Hala</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="vitezove" data-title="Vítězný pohár" data-desc="Putovní pohár VOŠKH CUP čeká na vítěze">
+            <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=700&q=80" alt="Pohár" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Vítězný pohár <span>Vítězové</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="atmosfera" data-title="Fanoušci" data-desc="Palubovka zaplněná přívrženci obou týmů">
+            <img src="https://images.unsplash.com/photo-1519861531473-9200262188bf?auto=format&fit=crop&w=700&q=80" alt="Basketbalová atmosféra" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Fanoušci <span>Atmosféra</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="zapas" data-title="Skok na koš" data-desc="Snaha o body v play-off">
+            <img src="https://images.unsplash.com/photo-1563299796-17596ed6b017?auto=format&fit=crop&w=700&q=80" alt="Skok na koš" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Skok na koš <span>Zápasy</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="hala" data-title="Přestávka" data-desc="Pohled na halu v zákulisí turnaje">
+            <img src="https://images.unsplash.com/photo-1560272564-c83b66b1ad12?auto=format&fit=crop&w=700&q=80" alt="Basketbalová hala" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Přestávka <span>Hala</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="zapas" data-title="Obrana" data-desc="Taktická obrana v semifinále">
+            <img src="https://images.unsplash.com/photo-1574623452334-1e0ac2b3ccb4?auto=format&fit=crop&w=700&q=80" alt="Obrana" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Obrana <span>Zápasy</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="vitezove" data-title="Vyhlášení vítězů" data-desc="Předání medailí a putovního poháru">
+            <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?auto=format&fit=crop&w=700&q=80" alt="Vyhlášení vítězů" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Vyhlášení vítězů <span>Vítězové</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="atmosfera" data-title="Tým v akci" data-desc="Energie a soustředění na palubovce">
+            <img src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=700&q=80" alt="Tým basketbalu" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Tým v akci <span>Atmosféra</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="zapas" data-title="Driblink" data-desc="Rychlý protiútok k brankovišti">
+            <img src="https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?auto=format&fit=crop&w=700&q=80" alt="Driblink" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Driblink <span>Zápasy</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="hala" data-title="Prkno a koš" data-desc="Detail profesionálního koše">
+            <img src="https://images.unsplash.com/photo-1505666287802-931dc83948e9?auto=format&fit=crop&w=700&q=80" alt="Basketbalový koš" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Prkno a koš <span>Hala</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="atmosfera" data-title="Spolupráce" data-desc="Radost z výhry s celým týmem">
+            <img src="https://images.unsplash.com/photo-1489944440615-453fc2b6a9a9?auto=format&fit=crop&w=700&q=80" alt="Týmová radost" loading="lazy">
+            <div class="gallery-overlay">
+                <div class="gallery-caption">Spolupráce <span>Atmosféra</span></div>
+            </div>
+            <div class="zoom-icon"><i class="fas fa-expand"></i></div>
+        </div>
+
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightbox-close"><i class="fas fa-times"></i></button>
+            <button class="lightbox-nav lightbox-prev" id="lb-prev"><i class="fas fa-chevron-left"></i></button>
+            <button class="lightbox-nav lightbox-next" id="lb-next"><i class="fas fa-chevron-right"></i></button>
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>VOŠKH CUP</h4>
+                <p>Basketbalový turnaj pro studenty Vyšší odborné školy a Střední školy Kutná Hora.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Rychlé odkazy</h4>
+                <a href="informace.html">Informace &amp; pravidla</a>
+                <a href="misto.html">Místo konání</a>
+                <a href="odmeny.html">Odměny</a>
+                <a href="faq.html">FAQ</a>
+                <a href="index.html#registrace">Registrace</a>
+            </div>
+            <div class="footer-col">
+                <h4>Kontakt</h4>
+                <p>VOŠKH Kutná Hora</p>
+                <p>Hala Klimeška</p>
+                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Basketbalový Turnaj VOŠKH &mdash; Kutná Hora
+        </div>
+    </footer>
+
+    <script>
+        // HAMBURGER
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        hamburger.addEventListener('click', () => {
+            const isOpen = hamburger.classList.toggle('open');
+            navLinks.classList.toggle('open');
+            hamburger.setAttribute('aria-expanded', isOpen);
+            hamburger.setAttribute('aria-label', isOpen ? 'Zavřít menu' : 'Otevřít menu');
+        });
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                navLinks.classList.remove('open');
+            });
+        });
+
+        // FILTER
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const allItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                allItems.forEach(item => {
+                    const match = filter === 'all' || item.dataset.category === filter;
+                    item.style.display = match ? 'block' : 'none';
+                });
+            });
+        });
+
+        // LIGHTBOX
+        let currentIndex = 0;
+        let visibleItems = [];
+
+        function openLightbox(index) {
+            visibleItems = [...allItems].filter(el => el.style.display !== 'none');
+            currentIndex = index;
+            showLightboxItem(currentIndex);
+            document.getElementById('lightbox').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showLightboxItem(index) {
+            const item = visibleItems[index];
+            document.getElementById('lightbox-img').src = item.querySelector('img').src;
+            document.getElementById('lightbox-img').alt = item.querySelector('img').alt;
+            document.getElementById('lightbox-title').textContent = item.dataset.title;
+            document.getElementById('lightbox-desc').textContent = item.dataset.desc;
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        allItems.forEach((item, idx) => {
+            item.addEventListener('click', () => openLightbox(idx));
+        });
+
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('lightbox')) closeLightbox();
+        });
+
+        document.getElementById('lb-prev').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+            showLightboxItem(currentIndex);
+        });
+        document.getElementById('lb-next').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % visibleItems.length;
+            showLightboxItem(currentIndex);
+        });
+
+        // Klávesnicová navigace v lightboxu
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') { currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length; showLightboxItem(currentIndex); }
+            if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % visibleItems.length; showLightboxItem(currentIndex); }
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // SCROLL ANIMACE
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), i * 60);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
