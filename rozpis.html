@@ -253,6 +253,49 @@
         .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
         .reveal.visible { opacity: 1; transform: translateY(0); }
 
+        /* ===== TISK / PRINT ===== */
+        .print-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 11px 26px;
+            border-radius: 50px;
+            border: 1px solid #333;
+            background: var(--card-bg);
+            color: #aaa;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .print-btn:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+        @media print {
+            nav, .print-btn, .info-banner, footer, .hamburger, .reveal:not(.visible) { display: none !important; }
+            body { background: #fff !important; color: #111 !important; }
+            .schedule-hero { background: none !important; padding: 20px 0 10px !important; }
+            .schedule-hero h1 { color: #FF5722 !important; font-size: 3rem !important; }
+            .schedule-hero p { color: #555 !important; }
+            .section { padding: 0 0 30px !important; }
+            .section-title { color: #111 !important; }
+            .section-title span { color: #FF5722 !important; }
+            .group-card, .match-card, .bracket-match { border: 1px solid #ccc !important; background: #fff !important; box-shadow: none !important; }
+            .group-header { background: #FF5722 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .match-time { color: #555 !important; }
+            .team-side-name { color: #111 !important; }
+            .score { color: #111 !important; }
+            .score.winner { color: #FF5722 !important; }
+            .bt-name { color: #111 !important; }
+            .bracket-match:hover { border-color: #ccc !important; }
+            .status-upcoming { background: #eee !important; color: #555 !important; }
+            .group-table td { color: #111 !important; border-bottom-color: #ddd !important; }
+            .group-table tbody tr:hover { background: none !important; }
+            footer { display: none !important; }
+            @page { margin: 15mm; }
+        }
+
         /* --- FOOTER --- */
         footer { padding: 60px 20px; background: #080808; border-top: 2px solid #1e1e1e; }
         .footer-inner { max-width: 900px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
@@ -297,6 +340,9 @@
     <header class="schedule-hero">
         <h1>Rozpis zápasů</h1>
         <p>15. ČERVNA 2026 &nbsp;|&nbsp; HALA KLIMEŠKA</p>
+        <button class="print-btn" onclick="window.print()" aria-label="Vytisknout rozpis">
+            <i class="fas fa-print"></i> Vytisknout rozpis
+        </button>
     </header>
 
     <!-- NOTICE -->
