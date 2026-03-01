@@ -175,7 +175,6 @@
                 <li><a href="misto.html">Místo</a></li>
                 <li><a href="odmeny.html">Odměny</a></li>
                 <li><a href="rozpis.html">Rozpis</a></li>
-                <li><a href="galerie.html">Galerie</a></li>
                 <li><a href="faq.html" class="active">FAQ</a></li>
                 <li><a href="index.html#registrace">Registrace</a></li>
             </ul>
@@ -333,7 +332,7 @@
         <h2>Stále máš otázku?</h2>
         <p>Napiš nám na školní email nebo se rovnou zaregistruj!</p>
         <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
-            <a href="mailto:info@voskh.cz" class="btn"><i class="fas fa-envelope"></i> Napsat email</a>
+            <a href="#" class="btn" title="Kliknutím zkopíruješ email" onclick="var el=this;navigator.clipboard.writeText('info@voskh.cz');el.innerHTML='<i class=\'fas fa-check\'></i> Email zkopírován!';setTimeout(function(){el.innerHTML='<i class=\'fas fa-envelope\'></i> Napsat email';},2000);return false;"><i class="fas fa-envelope"></i> Napsat email</a>
             <a href="index.html#registrace" class="btn" style="background: transparent; border: 2px solid rgba(255,255,255,0.3); box-shadow: none;"><i class="fas fa-basketball-ball"></i> Registrovat tým</a>
         </div>
     </section>
@@ -356,7 +355,7 @@
                 <h4>Kontakt</h4>
                 <p>VOŠKH Kutná Hora</p>
                 <p>Hala Klimeška</p>
-                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+                <a href="#" title="Kliknutím zkopíruješ email" onclick="var el=this;navigator.clipboard.writeText('info@voskh.cz');el.textContent='✓ Zkopírováno!';setTimeout(function(){el.textContent='info@voskh.cz';},2000);return false;">info@voskh.cz</a>
             </div>
         </div>
         <div class="footer-bottom">

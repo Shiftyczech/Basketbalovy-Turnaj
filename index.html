@@ -6,6 +6,9 @@
     <title>Basketbalový Turnaj VOŠKH | Kutná Hora</title>
     <meta name="description" content="Basketbalový turnaj pro studenty VOŠKH Kutná Hora. 15. června 2026, Hala Klimeška. Zaregistruj svůj tým!">
     <meta name="theme-color" content="#FF5722">
+    <link rel="manifest" href="manifest.json">
+    <!-- Plausible Analytics – nahraď 'voskh.cz' svou doménou na plausible.io -->
+    <script defer data-domain="voskh.cz" src="https://plausible.io/js/script.js"></script>
     <meta property="og:title" content="VOŠKH CUP 2026 – Basketbalový Turnaj">
     <meta property="og:description" content="Basketbalový turnaj pro studenty VOŠKH. 15. června 2026, Hala Klimeška, Kutná Hora.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80">
@@ -75,7 +78,18 @@
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover { color: var(--orange); }
+        .nav-links a { position: relative; }
+        .nav-links a:hover, .nav-links a.active { color: var(--orange); }
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--orange);
+            border-radius: 2px;
+        }
         
         /* --- OPRAVA HEADERU (Obrázek už nebude uřízlý) --- */
         header {
@@ -120,10 +134,20 @@
             transform: translateY(-5px) scale(1.05); 
             box-shadow: 0 8px 25px rgba(255,87,34,0.5);
         }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.35);
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.65);
+            box-shadow: none;
+        }
 
         /* --- ODPOČET --- */
         #countdown-section { 
-            background: #000; 
+            background: radial-gradient(ellipse at 50% 50%, #1c0900 0%, #000 65%);
             padding: 80px 0; 
             border-top: 4px solid var(--orange); 
         }
@@ -178,7 +202,11 @@
             width: 100%; padding: 18px; margin-bottom: 20px; border: 1px solid #333; 
             background: #0d0d0d; color: white; border-radius: 8px; outline: none; font-size: 1rem;
         }
-        .reg-form input:focus, .reg-form textarea:focus { border-color: var(--orange); }
+        .reg-form input:focus, .reg-form textarea:focus {
+            border-color: var(--orange);
+            border-left: 3px solid var(--orange);
+            background: #111;
+        }
         .reg-form label {
             display: block;
             text-align: left;
@@ -260,7 +288,7 @@
 
         footer { 
             padding: 60px 20px; 
-            color: #555; 
+            color: #999; 
             border-top: 2px solid #1e1e1e; 
             background: #080808;
         }
@@ -281,7 +309,7 @@
             margin-bottom: 12px; 
         }
         .footer-col p, .footer-col a { 
-            color: #666; 
+            color: #888; 
             font-size: 0.9rem; 
             line-height: 1.9; 
             text-decoration: none;
@@ -294,6 +322,21 @@
             border-top: 1px solid #1a1a1a; 
             color: #333; 
             font-size: 0.85rem; 
+        }
+
+        /* --- SEKČNÍ NADPISY S AKCENTEM --- */
+        .h-accent {
+            position: relative;
+            padding-bottom: 4px;
+        }
+        .h-accent::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--orange);
+            margin: 14px auto 0;
+            border-radius: 2px;
         }
 
         /* --- HAMBURGER MENU --- */
@@ -439,6 +482,189 @@
                 border-bottom: 1px solid #1a1a1a;
             }
         }
+
+        /* ===== DARK / LIGHT MODE ===== */
+        body.light {
+            --dark-bg: #f2f2f2;
+            --card-bg: #ffffff;
+            --nav-bg: rgba(250,250,250,0.98);
+            color: #1a1a1a;
+            background-color: var(--dark-bg);
+        }
+        body.light .nav-logo { color: #1a1a1a; }
+        body.light .nav-links a { color: #1a1a1a; }
+        body.light .hamburger span { background: #1a1a1a; }
+        body.light #countdown-section { background: #e0e0e0; }
+        body.light .digit-box { background: #fff; border-color: rgba(255,87,34,0.25); }
+        body.light .digit { color: #1a1a1a; }
+        body.light .unit-label { color: #666; }
+        body.light .info-card { background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.07); }
+        body.light .info-card:hover { background: #f7f7f7; }
+        body.light .info-card p { color: #444; }
+        body.light .teams-table { background: #fff; }
+        body.light .teams-table td { border-bottom-color: #eee; color: #1a1a1a; }
+        body.light .teams-table tbody tr:hover { background: #fafafa; }
+        body.light .no-teams { color: #888; }
+        body.light .reg-section { background: #e8e8e8; }
+        body.light .reg-form { background: #fff; box-shadow: 0 5px 20px rgba(0,0,0,0.07); }
+        body.light .reg-form input, body.light .reg-form textarea { background: #f5f5f5; color: #1a1a1a; border-color: #ddd; }
+        body.light .reg-form label { color: #666; }
+        body.light .reg-form input:focus, body.light .reg-form textarea:focus { background: #fff; }
+        body.light .players-content { background: #f5f5f5; }
+        body.light .players-list { color: #333; }
+        body.light .players-list li { border-bottom-color: #eee; }
+        body.light footer { background: #e0e0e0; }
+        body.light .footer-col p, body.light .footer-col a { color: #555; }
+        body.light .footer-bottom { color: #888; border-top-color: #ccc; }
+        body.light #toast { background: #fff; color: #1a1a1a; box-shadow: 0 10px 40px rgba(0,0,0,0.12); }
+        body.light .skeleton-bar { background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%); background-size: 200% 100%; }
+        body.light .faq-section { background: #e8e8e8; }
+        body.light .faq-item { border-bottom-color: #ccc; }
+        body.light .faq-question { color: #1a1a1a; }
+        body.light .faq-answer { color: #555; }
+        body.light .reg-progress-bar { background: #ccc; }
+        body.light .table-search { color: #1a1a1a; border-color: #ccc; background: #fff; }
+        body.light .export-btn { background: #fff; border-color: #ccc; color: #555; }
+        body.light #announcement-bar { background: linear-gradient(90deg, #fff3e0, #ffe0cc); }
+        body.light #announcement-bar p { color: #7a3000; }
+        body.light #announcement-close { color: #aaa; }
+
+        /* ===== THEME TOGGLE ===== */
+        .theme-toggle {
+            background: none;
+            border: 1px solid #444;
+            color: #ccc;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover { border-color: var(--orange); color: var(--orange); }
+        body.light .theme-toggle { border-color: #aaa; color: #555; }
+
+        /* ===== SCROLL TO TOP ===== */
+        #scroll-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 46px;
+            height: 46px;
+            background: var(--orange);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255,87,34,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(12px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 998;
+        }
+        #scroll-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+        #scroll-top:hover { background: var(--orange-hover); transform: translateY(-3px) !important; }
+
+        /* ===== ANNOUNCEMENT BAR ===== */
+        #announcement-bar {
+            position: fixed;
+            top: 82px;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #1e0800, #2d1000);
+            border-bottom: 2px solid var(--orange);
+            padding: 11px 5%;
+            text-align: center;
+            display: none;
+            z-index: 997;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        #announcement-bar.show { display: block; }
+        #announcement-bar p { color: #ffcc99; margin: 0; font-size: 0.9rem; padding-right: 30px; }
+        #announcement-bar strong { color: var(--orange); margin-right: 6px; }
+        #announcement-close {
+            position: absolute; right: 16px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none; color: #777;
+            cursor: pointer; font-size: 1rem; line-height: 1;
+            transition: color 0.2s;
+        }
+        #announcement-close:hover { color: var(--orange); }
+
+        /* ===== PROGRESS BAR ===== */
+        .reg-progress { margin: 18px auto 0; max-width: 480px; }
+        .reg-progress-label {
+            display: flex; justify-content: space-between;
+            font-size: 0.82rem; color: #666; margin-bottom: 7px;
+        }
+        .reg-progress-label .prog-count { color: var(--orange); font-weight: 700; }
+        .reg-progress-bar {
+            height: 7px; background: #252525;
+            border-radius: 10px; overflow: hidden;
+        }
+        .reg-progress-fill {
+            height: 100%; background: var(--orange);
+            border-radius: 10px; width: 0%;
+            transition: width 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* ===== TABLE TOOLBAR ===== */
+        .table-toolbar {
+            display: flex; gap: 10px; margin-bottom: 16px;
+            flex-wrap: wrap; align-items: center;
+            justify-content: space-between;
+        }
+        .table-search {
+            flex: 1; min-width: 180px;
+            padding: 11px 18px;
+            background: var(--card-bg); border: 1px solid #2e2e2e;
+            border-radius: 50px; color: #fff;
+            font-size: 0.9rem; outline: none;
+            transition: border-color 0.3s;
+        }
+        .table-search::placeholder { color: #555; }
+        .table-search:focus { border-color: var(--orange); }
+        .export-btns { display: flex; gap: 8px; }
+        .export-btn {
+            padding: 10px 16px; border-radius: 50px;
+            border: 1px solid #2e2e2e; background: var(--card-bg);
+            color: #888; font-size: 0.82rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .export-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+        /* ===== FAQ ACCORDION ===== */
+        .faq-section { padding: 100px 0; background: #0a0a0a; }
+        .faq-list { max-width: 760px; margin: 50px auto 0; text-align: left; }
+        .faq-item { border-bottom: 1px solid #222; }
+        .faq-question {
+            width: 100%; background: none; border: none; color: #fff;
+            text-align: left; padding: 22px 8px;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; display: flex;
+            justify-content: space-between; align-items: center; gap: 20px;
+            transition: color 0.3s;
+        }
+        .faq-question:hover { color: var(--orange); }
+        .faq-icon { font-size: 1.3rem; color: var(--orange); transition: transform 0.35s ease; flex-shrink: 0; }
+        .faq-item.open .faq-icon { transform: rotate(45deg); }
+        .faq-answer {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.3s ease;
+            color: #888; font-size: 0.95rem; line-height: 1.8; padding: 0 8px;
+        }
+        .faq-item.open .faq-answer { max-height: 300px; padding: 0 8px 22px; }
     </style>
 </head>
 <body>
@@ -455,22 +681,30 @@
                 <li><a href="misto.html">Místo</a></li>
                 <li><a href="odmeny.html">Odměny</a></li>
                 <li><a href="rozpis.html">Rozpis</a></li>
-                <li><a href="galerie.html">Galerie</a></li>
                 <li><a href="faq.html">FAQ</a></li>
                 <li><a href="#registrace">Registrace</a></li>
             </ul>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Přepnout motiv" title="Přepnout Dark / Light">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
     </nav>
+
+    <!-- ANNOUNCEMENT BAR – nastav text přes localStorage.setItem('announcement','Text') -->
+    <div id="announcement-bar">
+        <p><strong>📢 Oznámení:</strong> <span id="announcement-text"></span></p>
+        <button id="announcement-close" aria-label="Zavřít oznámení">&times;</button>
+    </div>
 
     <header>
         <div class="container">
             <div class="hero-content">
-                <h1>Hala Klimeška<br>Kutná Hora</h1>
+                <h1>VOŠKH<br><span style="color: var(--orange);">CUP 2026</span></h1>
                 <p style="font-size: 1.4rem; letter-spacing: 3px; margin-top: 10px; color: rgba(255,255,255,0.8);">BASKETBALOVÝ TURNAJ PRO ŽÁKY VOŠKH</p>
-                <p style="font-size: 1.1rem; margin-top: 15px; color: var(--orange); font-family: 'Bebas Neue'; letter-spacing: 3px;">15. ČERVNA 2026 &nbsp;|&nbsp; 9:00 &nbsp;|&nbsp; KUTNÁ HORA</p>
+                <p style="font-size: 1.1rem; margin-top: 15px; color: var(--orange); font-family: 'Bebas Neue'; letter-spacing: 3px;">15. ČERVNA 2026 &nbsp;|&nbsp; 9:00 &nbsp;|&nbsp; HALA KLIMEŠKA, KUTNÁ HORA</p>
                 <div style="display:flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 30px;">
                     <a href="#registrace" class="btn">ZAREGISTROVAT TÝM</a>
-                    <a href="informace.html" class="btn" style="background: transparent; border: 2px solid rgba(255,255,255,0.4); box-shadow: none;">VÍCE INFORMACÍ</a>
+                    <a href="informace.html" class="btn btn-outline">VÍCE INFORMACÍ</a>
                 </div>
             </div>
         </div>
@@ -489,7 +723,7 @@
     </section>
 
     <section id="informace" class="container" style="padding: 120px 0;">
-        <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 20px;">O co v turnaji jde?</h2>
+        <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 20px;" class="h-accent">O co v turnaji jde?</h2>
         <div class="info-grid">
             <div class="info-card reveal">
                 <span class="card-icon"><i class="fas fa-map-marker-alt"></i></span>
@@ -515,6 +749,28 @@
             Registrované týmy
             <span class="teams-count-badge" id="teams-badge" style="display:none;">0</span>
         </h2>
+        <!-- PROGRESS BAR KAPACITY -->
+        <div class="reg-progress" id="reg-progress">
+            <div class="reg-progress-label">
+                <span>Obsazenost turnaje</span>
+                <span class="prog-count"><span id="prog-current">0</span>&nbsp;/&nbsp;8 týmů</span>
+            </div>
+            <div class="reg-progress-bar">
+                <div class="reg-progress-fill" id="prog-fill"></div>
+            </div>
+        </div>
+        <!-- TOOLBAR: vyhledávání + export -->
+        <div class="table-toolbar">
+            <input type="search" class="table-search" id="team-search" placeholder="🔍 Hledat tým nebo kapitána…" aria-label="Hledat tým">
+            <div class="export-btns">
+                <button class="export-btn" onclick="exportCSV()" title="Stáhnout CSV">
+                    <i class="fas fa-file-csv"></i> CSV
+                </button>
+                <button class="export-btn" onclick="exportPDF()" title="Tisknout / uložit jako PDF">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+            </div>
+        </div>
         <table class="teams-table">
             <thead>
                 <tr>
@@ -533,7 +789,7 @@
 
     <section id="registrace" class="reg-section reveal">
         <div class="container">
-            <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 40px;">Registrace</h2>
+            <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 40px;" class="h-accent">Registrace</h2>
             <form id="registration-form" class="reg-form">
                 <div class="field">
                     <label for="captain-name">Jméno a příjmení kapitána</label>
@@ -556,6 +812,47 @@
         </div>
     </section>
 
+    <!-- FAQ SEKCE -->
+    <section class="faq-section" id="faq-home">
+        <div class="container">
+            <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem; margin-bottom: 0;" class="h-accent reveal">Nejčastější otázky</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question">Kdo se může turnaje zúčastnit? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Turnäj je určen výlučně pro studenty a žáky Vyšší odborné školy a Střední školy Kutná Hora (VOŠKH). Při registraci je vyžadován školní email (@voskh.cz).</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Kolik hráčů tvoří jeden tým? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Tým se skládá z 5 hráčů na hřišti a může mít až 3 náhradníky, tedy celkem 8 hráčů. Minimální počet pro nastíp v zápase jsou 5 hráčů.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Jak probíhá systém hry? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Turnaj se hrá systémem základních skupin a následného vyřazovacího kola (play-off). Všechny zápasy základních skupin se hrájí na 2 × 15 minut. Podrobnosti najdeš na stránce <a href="informace.html" style="color:var(--orange);">Informace</a>.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Je účast zdarma? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Ano, účast na turnäji je zcela zdarma. Stčí se pouze včas zaregistrovat, kapäcita míst je omezena.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Co potřebuji mít s sebou? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Přines si sálovou obuv (podmínka vstupu do haly), vhodné sportovní oblečení a školský prūkaz pro ověření příslušnosti ke škole.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Do kdy se můžu přihlásit? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Registrace je otevřená do vyplnění kapäcity 8 týmů, nejpozději však do 10. června 2026. Doplátní registrace po deadline nebude možná.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Kde přesně se koná turnaj? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Turnäj proběhne v Halě Klimeška, Kutná Hora. Podrobné informace o poloze a parkovaní najdeš na stránce <a href="misto.html" style="color:var(--orange);">Místo</a>.</div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Co získá vítězný tým? <span class="faq-icon">+</span></button>
+                    <div class="faq-answer">Vítězný tým získá putonní pohár a hodnotné balíčky. Celý přehled odměn najdeš na stránce <a href="odmeny.html" style="color:var(--orange);">Odměny</a>.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         <div class="footer-inner">
             <div class="footer-col">
@@ -565,16 +862,18 @@
             <div class="footer-col">
                 <h4>Sdílet turnaj</h4>
                 <p style="color:#666; font-size:0.85rem; margin-bottom:10px;">Sdílej kamarádům!</p>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#1877f2; font-size:0.9rem; margin-bottom:6px;" onclick="shareFB()"><i class="fab fa-facebook"></i> Facebook</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#25d366; font-size:0.9rem; margin-bottom:6px;" onclick="shareWA()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#1d9bf0; font-size:0.9rem; margin-bottom:6px;" onclick="shareTW()"><i class="fab fa-x-twitter"></i> X / Twitter</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#229ed9; font-size:0.9rem; margin-bottom:6px;" onclick="shareTG()"><i class="fab fa-telegram"></i> Telegram</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#dd2a7b; font-size:0.9rem; margin-bottom:6px;" onclick="shareIG()"><i class="fab fa-instagram"></i> Instagram</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#0a66c2; font-size:0.9rem; margin-bottom:6px;" onclick="shareLI()"><i class="fab fa-linkedin"></i> LinkedIn</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#aaa; font-size:0.9rem; margin-bottom:6px;" onclick="shareEmail()"><i class="fas fa-envelope"></i> Email</a>
-                <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#aaa; font-size:0.9rem; margin-bottom:6px;" onclick="showQR()"><i class="fas fa-qrcode"></i> QR kód</a>
-                <a id="copy-link-btn" style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#888; font-size:0.9rem; margin-bottom:6px;" onclick="copyLink()"><i class="fas fa-link"></i> Kopírovat odkaz</a>
-                <a id="native-share-btn" style="display:none; cursor:pointer; align-items:center; gap:6px; color:var(--orange); font-size:0.9rem;" onclick="shareNative()"><i class="fas fa-share-nodes"></i> Sdílet (telefon)</a>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 16px;">
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#1877f2; font-size:0.9rem;" onclick="shareFB()"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#25d366; font-size:0.9rem;" onclick="shareWA()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#1d9bf0; font-size:0.9rem;" onclick="shareTW()"><i class="fab fa-x-twitter"></i> X / Twitter</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#229ed9; font-size:0.9rem;" onclick="shareTG()"><i class="fab fa-telegram"></i> Telegram</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#dd2a7b; font-size:0.9rem;" onclick="shareIG()"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#0a66c2; font-size:0.9rem;" onclick="shareLI()"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#aaa; font-size:0.9rem;" onclick="shareEmail()"><i class="fas fa-envelope"></i> Zkopírovat</a>
+                    <a style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#aaa; font-size:0.9rem;" onclick="showQR()"><i class="fas fa-qrcode"></i> QR kód</a>
+                    <a id="copy-link-btn" style="cursor:pointer; display:flex; align-items:center; gap:6px; color:#888; font-size:0.9rem;" onclick="copyLink()"><i class="fas fa-link"></i> Kopírovat</a>
+                    <a id="native-share-btn" style="display:none; cursor:pointer; align-items:center; gap:6px; color:var(--orange); font-size:0.9rem;" onclick="shareNative()"><i class="fas fa-share-nodes"></i> Sdílet</a>
+                </div>
             </div>
             <div class="footer-col">
                 <h4>Rychlé odkazy</h4>
@@ -587,13 +886,17 @@
                 <h4>Kontakt</h4>
                 <p>VOŠKH Kutná Hora</p>
                 <p>Hala Klimeška</p>
-                <a href="mailto:info@voskh.cz">info@voskh.cz</a>
+                <a href="#" title="Kliknutím zkopíruješ email" onclick="navigator.clipboard.writeText('info@voskh.cz');showToast('Email zkopírován do schránky!');return false;">info@voskh.cz</a>
             </div>
         </div>
         <div class="footer-bottom">
             &copy; 2026 Basketbalový Turnaj VOŠKH &mdash; Kutná Hora
         </div>
     </footer>
+
+    <button id="scroll-top" aria-label="Zpět nahoru" title="Zpět nahoru">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 
     <div id="toast"></div>
 
@@ -736,13 +1039,14 @@
             const googleTeams = await loadTeamsFromGoogle();
             teams = googleTeams && googleTeams.length > 0 ? googleTeams : [];
 
-            // Aktualizace badge
+            // Aktualizace badge + progress bar
             if (teams.length > 0) {
                 badge.textContent = teams.length;
                 badge.style.display = 'inline-block';
             } else {
                 badge.style.display = 'none';
             }
+            if (typeof window.updateProgressBar === 'function') window.updateProgressBar(teams.length);
 
             if (teams.length === 0) {
                 tbody.innerHTML = '<tr class="no-teams"><td colspan="5">Zatím není žádný registrovaný tým</td></tr>';
@@ -810,9 +1114,8 @@
         }
         function shareLI() { window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrl, '_blank', 'width=600,height=500'); }
         function shareEmail() {
-            const subject = encodeURIComponent('VOŠKH CUP 2026 – Basketbalový turnaj');
-            const body = encodeURIComponent('Ahoj! Podívej se na basketbalový turnaj VOŠKH CUP 2026.\n\n15. června 2026 | Hala Klimeška, Kutná Hora\n\n' + window.location.href);
-            window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+            navigator.clipboard.writeText(window.location.href);
+            showToast('Odkaz zkopírován do schránky!');
         }
         function showQR() {
             const url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(window.location.href) + '&bgcolor=ffffff&margin=5';
@@ -859,6 +1162,120 @@
 
         // ===== INICIALIZACE =====
         window.addEventListener('DOMContentLoaded', function () {
+
+            // ----- SERVICE WORKER (PWA) -----
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+            }
+
+            // ----- DARK / LIGHT MODE -----
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const applyTheme = (light) => {
+                document.body.classList.toggle('light', light);
+                themeIcon.className = light ? 'fas fa-sun' : 'fas fa-moon';
+                localStorage.setItem('theme', light ? 'light' : 'dark');
+            };
+            applyTheme(localStorage.getItem('theme') === 'light');
+            themeToggle.addEventListener('click', () => {
+                applyTheme(!document.body.classList.contains('light'));
+            });
+
+            // ----- SCROLL TO TOP -----
+            const scrollTopBtn = document.getElementById('scroll-top');
+            window.addEventListener('scroll', () => {
+                scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+            });
+            scrollTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ----- ANNOUNCEMENT BAR -----
+            const announcementText = localStorage.getItem('announcement');
+            const announcementBar = document.getElementById('announcement-bar');
+            if (announcementText && announcementText.trim()) {
+                document.getElementById('announcement-text').textContent = announcementText;
+                announcementBar.classList.add('show');
+            }
+            document.getElementById('announcement-close').addEventListener('click', () => {
+                announcementBar.classList.remove('show');
+            });
+
+            // ----- FAQ ACCORDION -----
+            document.querySelectorAll('.faq-question').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.closest('.faq-item');
+                    const isOpen = item.classList.contains('open');
+                    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+                    if (!isOpen) item.classList.add('open');
+                });
+            });
+
+            // ----- TABLE SEARCH -----
+            const searchInput = document.getElementById('team-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    const q = searchInput.value.toLowerCase();
+                    const rows = document.querySelectorAll('#teams-tbody tr:not(.players-row):not(.skeleton-row)');
+                    let visible = 0;
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        const show = text.includes(q);
+                        row.style.display = show ? '' : 'none';
+                        // hide the matching expand row too
+                        const next = row.nextElementSibling;
+                        if (next && next.classList.contains('players-row')) {
+                            next.style.display = show && next.classList.contains('show') ? 'table-row' : (show ? '' : 'none');
+                        }
+                        if (show) visible++;
+                    });
+                });
+            }
+
+            // ----- EXPORT CSV -----
+            window.exportCSV = function() {
+                if (!teams || teams.length === 0) { showToast('Žádné týmy k exportu.', true); return; }
+                const header = ['Název týmu', 'Kapitán', 'Email', 'Čas registrace', 'Hráči'];
+                const rows = teams.map(t => [
+                    `"${(t.teamName || '').replace(/"/g, '""')}"`,
+                    `"${(t.captainName || '').replace(/"/g, '""')}"`,
+                    `"${(t.email || '').replace(/"/g, '""')}"`,
+                    `"${(t.registrationTime || '').replace(/"/g, '""')}"`,
+                    `"${(Array.isArray(t.players) ? t.players.join(', ') : (t.players || '')).replace(/"/g, '""')}"`
+                ]);
+                const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'voskh-cup-tymy.csv';
+                a.click(); URL.revokeObjectURL(url);
+                showToast('\u2713 CSV exportováno!');
+            };
+
+            // ----- EXPORT PDF (tisk) -----
+            window.exportPDF = function() {
+                if (!teams || teams.length === 0) { showToast('Žádné týmy k exportu.', true); return; }
+                const win = window.open('', '_blank');
+                const rows = teams.map((t, i) =>
+                    `<tr><td>${i+1}</td><td><strong>${t.teamName||''}</strong></td><td>${t.captainName||''}</td><td>${t.email||''}</td><td>${t.registrationTime||''}</td></tr>`
+                ).join('');
+                win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>VOŠKH CUP 2026 – Registrované týmy</title>
+                <style>body{font-family:Arial,sans-serif;padding:30px;color:#111}h1{color:#FF5722;font-size:1.6rem}table{width:100%;border-collapse:collapse;margin-top:20px}th{background:#FF5722;color:#fff;padding:10px;text-align:left}td{padding:9px 10px;border-bottom:1px solid #ddd}tr:nth-child(even){background:#f9f9f9}@media print{@page{margin:20mm}}</style>
+                </head><body><h1>VOŠKH CUP 2026 – Registrované týmy</h1><p>Vygenerováno: ${new Date().toLocaleString('cs-CZ')} | Celkem týmů: ${teams.length}</p>
+                <table><thead><tr><th>#</th><th>Název týmu</th><th>Kapitán</th><th>Email</th><th>Registrace</th></tr></thead><tbody>${rows}</tbody></table>
+                </body></html>`);
+                win.document.close();
+                setTimeout(() => win.print(), 400);
+            };
+
+            // ----- PROGRESS BAR -----
+            window.updateProgressBar = function(count) {
+                const MAX = 8;
+                document.getElementById('prog-current').textContent = count;
+                const pct = Math.min((count / MAX) * 100, 100);
+                document.getElementById('prog-fill').style.width = pct + '%';
+            };
+
             displayTeams();
 
             document.getElementById('registration-form').addEventListener('submit', async function (e) {
