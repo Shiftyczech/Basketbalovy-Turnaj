@@ -726,6 +726,26 @@
         body.light .mvp-team { color: #888; }
         body.light .mvp-votes { color: #888; }
         body.light .mvp-note { color: #999; }
+
+        /* ===== MVP LEADERBOARD TABLE ===== */
+        #mvp-leaderboard-wrap h3 { color: #fff; }
+        .mvp-lb-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 14px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .mvp-lb-table thead { background: linear-gradient(135deg, #FF5722, #e64a19); }
+        .mvp-lb-table th { padding: 16px 20px; text-align: left; font-size: 0.8rem; font-weight: 700; color: #000; text-transform: uppercase; letter-spacing: 1.5px; }
+        .mvp-lb-table td { padding: 14px 20px; border-bottom: 1px solid #1e1e1e; vertical-align: middle; }
+        .mvp-lb-table tbody tr:hover { background: #1e1e1e; }
+        .mvp-lb-table tbody tr:last-child td { border-bottom: none; }
+        .lb-rank { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,87,34,0.1); font-weight: 900; font-size: 0.95rem; color: var(--orange); }
+        .lb-bar-wrap { display: inline-block; width: 100px; height: 5px; background: #2a2a2a; border-radius: 10px; overflow: hidden; margin-left: 10px; vertical-align: middle; }
+        .lb-bar { display: block; height: 100%; background: linear-gradient(90deg, var(--orange), #ff8a65); border-radius: 10px; transition: width 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .lb-votes { font-family: 'Bebas Neue'; font-size: 1.3rem; color: var(--orange); }
+        .mvp-lb-footer { text-align: right; color: #444; font-size: 0.78rem; margin-top: 8px; }
+        body.light #mvp-leaderboard-wrap h3 { color: #1a1a1a; }
+        body.light .mvp-lb-table { box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        body.light .mvp-lb-table td { border-bottom-color: #eee; color: #1a1a1a; }
+        body.light .mvp-lb-table tbody tr:hover { background: #f5f5f5; }
+        body.light .mvp-lb-table .lb-bar-wrap { background: #e0e0e0; }
+        body.light .mvp-lb-footer { color: #aaa; }
     </style>
 </head>
 <body>
@@ -935,6 +955,12 @@
             <p style="color:#888; margin-top:14px; max-width:540px; margin-left:auto; margin-right:auto;">Kdo byl nejlepším hráčem turnaje? Každý hráč může hlasovat jednou. Hlasování se odemkne v den turnaje.</p>
             <div class="mvp-grid reveal" id="mvp-grid"></div>
             <p class="mvp-note" id="mvp-status-note"></p>
+
+            <!-- MVP TABULKA HLASŮ -->
+            <div id="mvp-leaderboard-wrap" style="margin-top:60px; max-width:800px; margin-left:auto; margin-right:auto;" class="reveal">
+                <h3 style="font-family:'Bebas Neue'; font-size:2.2rem; letter-spacing:2px; margin-bottom:20px;"><i class="fas fa-trophy" style="color:var(--orange); margin-right:10px;"></i>Výsledky hlasování</h3>
+                <div id="mvp-leaderboard"><p style="color:#555; padding:30px; text-align:center;">Hlasování ještě nebylo zahájeno.</p></div>
+            </div>
         </div>
     </section>
 
@@ -1010,6 +1036,52 @@
 
         // ===== GOOGLE SHEETS WEBHOOK =====
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6YanLWqA4GFcEE8mgkvQNS_Tn9Y4XmSqD-qZ348ewvfZpfZWEgdar1ES3FnMrfDMy/exec';
+
+        // ===== MVP HLASOVÁNÍ – ULOŽENÍ & NAČTENÍ HLASŮ =====
+        // Poznámka: Do Google Apps Script přidej tyto handlery:
+        //
+        //   POST { action: 'mvp_vote', playerKey: 'Jméno|Tým' }
+        //     → ulož řádek do listu "MVP_Votes" (sloupec A = playerKey, B = timestamp)
+        //
+        //   GET  ?action=mvp_votes
+        //     → vrať ContentService JSON: [ { playerKey: "...", count: N }, ... ]
+        //
+        //   Příklad kódu pro Apps Script (doPost / doGet):
+        //   if (data.action === 'mvp_vote') {
+        //     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('MVP_Votes')
+        //       || SpreadsheetApp.getActiveSpreadsheet().insertSheet('MVP_Votes');
+        //     sheet.appendRow([data.playerKey, new Date().toISOString()]);
+        //   }
+        //   if (e.parameter.action === 'mvp_votes') {
+        //     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('MVP_Votes');
+        //     if (!sheet) return ContentService.createTextOutput('[]').setMimeType(ContentService.MimeType.JSON);
+        //     var rows = sheet.getDataRange().getValues();
+        //     var map = {};
+        //     rows.forEach(function(r){ if(r[0]) map[r[0]] = (map[r[0]]||0)+1; });
+        //     var result = Object.keys(map).map(function(k){ return {playerKey:k,count:map[k]}; });
+        //     return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+        //   }
+
+        async function saveMVPVote(playerKey) {
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST', mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'mvp_vote', playerKey })
+                });
+            } catch(e) { console.error('Chyba při ukládání hlasu MVP:', e); }
+        }
+
+        async function loadMVPVotes() {
+            try {
+                const r = await fetch(GOOGLE_SCRIPT_URL + '?action=mvp_votes', { mode: 'cors' });
+                const data = await r.json();
+                return Array.isArray(data) ? data : [];
+            } catch(e) {
+                console.error('Chyba při načítání hlasů MVP:', e);
+                return [];
+            }
+        }
 
         // ===== TOAST NOTIFIKACE =====
         function showToast(message, isError = false) {
@@ -1362,8 +1434,52 @@
                 document.getElementById('prog-fill').style.width = pct + '%';
             };
 
-            // ----- MVP HLASOVÁNÍ – hráči z Google Sheets -----
-            window.renderMVP = function() {
+            // ----- MVP HLASOVÁNÍ – hráči z Google Sheets (s uložením hlasů) -----
+
+            window.renderMVPLeaderboard = function(allPlayers, voteMap) {
+                const wrap = document.getElementById('mvp-leaderboard');
+                if (!wrap) return;
+                if (!allPlayers || allPlayers.length === 0) {
+                    wrap.innerHTML = '<p style="color:#555; text-align:center; padding:30px;">Hráči budou dostupní po registraci týmů.</p>';
+                    return;
+                }
+                const entries = allPlayers.map(p => ({
+                    name: p.name, team: p.team,
+                    count: (voteMap && voteMap[p.name + '|' + p.team]) || 0
+                })).sort((a, b) => b.count - a.count);
+                const maxVotes = Math.max(entries[0]?.count || 0, 1);
+                const totalVotes = entries.reduce((s, e) => s + e.count, 0);
+                const medals = ['🥇', '🥈', '🥉'];
+                const rows = entries.map((e, i) => {
+                    const pct = Math.round((e.count / maxVotes) * 100);
+                    const rank = medals[i] !== undefined ? medals[i] : (i + 1);
+                    return `<tr>
+                        <td><span class="lb-rank">${rank}</span></td>
+                        <td><strong>${e.name}</strong></td>
+                        <td style="color:#888;">${e.team}</td>
+                        <td>
+                            <span class="lb-votes">${e.count}</span>
+                            <span class="lb-bar-wrap"><span class="lb-bar" style="width:${pct}%"></span></span>
+                        </td>
+                    </tr>`;
+                }).join('');
+                wrap.innerHTML = `
+                    <table class="mvp-lb-table">
+                        <thead>
+                            <tr>
+                                <th style="width:52px;">#</th>
+                                <th>Hráč</th>
+                                <th>Tým</th>
+                                <th>Hlasy</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                    <p class="mvp-lb-footer">Celkem hlasů: <strong style="color:var(--orange);">${totalVotes}</strong>&nbsp;·&nbsp;Aktualizováno: ${new Date().toLocaleTimeString('cs-CZ')}</p>
+                `;
+            };
+
+            window.renderMVP = async function() {
                 const grid = document.getElementById('mvp-grid');
                 const statusNote = document.getElementById('mvp-status-note');
                 if (!grid) return;
@@ -1383,8 +1499,15 @@
 
                 if (allPlayers.length === 0) {
                     grid.innerHTML = '<p style="color:#555; text-align:center; grid-column:1/-1; padding:40px 20px;">Hráči budou dostupní po registraci týmů.</p>';
+                    window.renderMVPLeaderboard([], {});
                     return;
                 }
+
+                // Načti hlasy z Google Sheets
+                const votes = await loadMVPVotes();
+                const voteMap = {};
+                votes.forEach(v => { voteMap[v.playerKey] = v.count; });
+                const maxVotes = Math.max(...votes.map(v => v.count), 1);
 
                 const votedKey = localStorage.getItem('mvp-vote');
                 const hasVoted = !!votedKey;
@@ -1393,20 +1516,20 @@
                     const key = p.name + '|' + p.team;
                     const isVoted = votedKey === key;
                     const isDisabled = hasVoted && !isVoted;
+                    const voteCount = voteMap[key] || 0;
+                    const barPct = Math.round((voteCount / maxVotes) * 100);
+                    const voteLabel = voteCount === 1 ? 'hlas' : (voteCount >= 2 && voteCount <= 4 ? 'hlasy' : 'hlasů');
                     return `
                         <div class="mvp-card${isVoted ? ' voted' : ''}${isDisabled ? ' disabled' : ''}"
-                             style="background:var(--card-bg);border:1px solid #2a2a2a;border-radius:14px;padding:22px 16px 18px;text-align:center;cursor:${isDisabled ? 'default' : 'pointer'};position:relative;transition:all 0.3s ease;"
                              onclick="castMVPVote('${key.replace(/'/g,"\\'")}')">
-                            <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,87,34,0.15);border:2px solid ${isVoted ? 'var(--orange)' : '#333'};display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:'Bebas Neue';font-size:1.6rem;color:var(--orange);">
+                            <div class="mvp-avatar" style="border-color:${isVoted ? 'var(--orange)' : '#333'}">
                                 ${p.name.charAt(0).toUpperCase()}
                             </div>
-                            <div style="font-weight:700;font-size:0.95rem;margin-bottom:4px;color:${isVoted ? 'var(--orange)' : '#fff'};">
-                                ${p.name}
-                            </div>
-                            <div style="font-size:0.75rem;color:#666;letter-spacing:0.05em;margin-bottom:14px;">
-                                ${p.team}
-                            </div>
-                            <button style="background:${isVoted ? 'var(--orange)' : (isDisabled ? '#222' : 'transparent')};color:${isVoted ? '#fff' : (isDisabled ? '#444' : 'var(--orange)')};border:1px solid ${isVoted ? 'var(--orange)' : (isDisabled ? '#2a2a2a' : 'var(--orange)')};border-radius:50px;padding:6px 18px;font-size:0.78rem;font-weight:700;cursor:${isDisabled ? 'default' : 'pointer'};transition:all 0.3s;" ${isDisabled ? 'disabled' : ''}>
+                            <div class="mvp-name" style="color:${isVoted ? 'var(--orange)' : '#fff'}">${p.name}</div>
+                            <div class="mvp-team">${p.team}</div>
+                            <div class="mvp-bar-wrap"><div class="mvp-bar" style="width:${barPct}%"></div></div>
+                            <div class="mvp-votes">${voteCount} ${voteLabel}</div>
+                            <button style="margin-top:10px;background:${isVoted ? 'var(--orange)' : (isDisabled ? '#222' : 'transparent')};color:${isVoted ? '#fff' : (isDisabled ? '#444' : 'var(--orange)')};border:1px solid ${isVoted ? 'var(--orange)' : (isDisabled ? '#2a2a2a' : 'var(--orange)')};border-radius:50px;padding:6px 18px;font-size:0.78rem;font-weight:700;cursor:${isDisabled ? 'default' : 'pointer'};transition:all 0.3s;" ${isDisabled ? 'disabled' : ''}>
                                 ${isVoted ? '✓ Tvůj hlas' : 'Hlasovat'}
                             </button>
                         </div>`;
@@ -1422,9 +1545,12 @@
                         statusNote.textContent = '';
                     }
                 }
+
+                // Vykresli tabulku výsledků
+                window.renderMVPLeaderboard(allPlayers, voteMap);
             };
 
-            window.castMVPVote = function(key) {
+            window.castMVPVote = async function(key) {
                 if (localStorage.getItem('mvp-vote')) return; // already voted
                 localStorage.setItem('mvp-vote', key);
                 const playerName = key.split('|')[0];
@@ -1432,8 +1558,14 @@
                 if (typeof confetti === 'function') {
                     confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 }, colors: ['#FF5722', '#fff', '#FFD54F'] });
                 }
-                window.renderMVP();
+                // Uložení hlasu do Google Sheets
+                await saveMVPVote(key);
+                // Aktualizuj zobrazení po krátkém prodlení (čas na zápis do Sheets)
+                setTimeout(() => window.renderMVP(), 1200);
             };
+
+            // Auto-refresh tabulky hlasů každých 30 sekund
+            setInterval(() => { if (typeof window.renderMVP === 'function') window.renderMVP(); }, 30000);
 
             displayTeams();
 
