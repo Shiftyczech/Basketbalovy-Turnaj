@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basketbalový Turnaj VOŠKH | Kutná Hora</title>
-    <meta name="description" content="Basketbalový turnaj pro studenty VOŠKH Kutná Hora. 15. června 2026, Hala Klimeška. Zaregistruj svůj tým!">
+    <title>Basketbalový turnaj VOŠKH CUP 2026 | Kutná Hora</title>
+    <meta name="description" content="Basketbalový turnaj pro studenty VOŠKH Kutná Hora. 15. června 2026, Hala Klimeška. Registrace týmů je otevřena – přihlas svůj tým a bojuj o putovní pohár!">
     <meta name="theme-color" content="#FF5722">
     <link rel="manifest" href="manifest.json">
     <!-- Plausible Analytics – nahraď 'voskh.cz' svou doménou na plausible.io -->
@@ -13,7 +13,43 @@
     <meta property="og:description" content="Basketbalový turnaj pro studenty VOŠKH. 15. června 2026, Hala Klimeška, Kutná Hora.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80">
     <meta property="og:type" content="website">
-    
+
+    <!-- Structured Data – SportsEvent (AEO/GEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SportsEvent",
+      "name": "VOŠKH CUP 2026",
+      "url": "https://basketbalovyzapas.duckdns.org/",
+      "description": "Basketbalový turnaj pro studenty VOŠKH Kutná Hora. 15. června 2026, Hala Klimeška. Registrace týmů je otevřena – přihlas svůj tým a bojuj o putovní pohár!",
+      "startDate": "2026-06-15T09:00:00+02:00",
+      "endDate": "2026-06-15T17:00:00+02:00",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "isAccessibleForFree": true,
+      "sport": "Basketball",
+      "location": {
+        "@type": "SportsActivityLocation",
+        "name": "Hala Klimeška",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Čáslavská 1982",
+          "addressLocality": "Kutná Hora",
+          "addressRegion": "Středočeský kraj",
+          "postalCode": "284 01",
+          "addressCountry": "CZ"
+        }
+      },
+      "organizer": {
+        "@type": "Organization",
+        "name": "VOŠKH Kutná Hora",
+        "url": "https://basketbalovyzapas.duckdns.org/"
+      },
+      "image": "https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=1200&q=80",
+      "inLanguage": "cs"
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Bebas+Neue&family=Barlow+Condensed:wght@400;600&display=swap" rel="stylesheet">
